@@ -7,8 +7,12 @@ let samplePlayers = [];
 // JSONファイルを読み込み
 async function loadData() {
   try {
-    const playersRes = await fetch("statics/json/players.json");
+    const [playersRes, teamsRes] = await Promise.all([
+      fetch("statics/json/players.json"),
+      fetch("statics/json/teams.json")
+    ]);
     samplePlayers = await playersRes.json();
+    sampleTeams = await teamsRes.json();
     render(); // データ取得後に初回描画
   } catch (err) {
     console.error("JSON load error:", err);
@@ -46,13 +50,10 @@ const resetBtn = document.getElementById('resetFilters');
    ------------------------- */
 tabs.forEach(t => {
   t.addEventListener('click', () => {
-    // 選手タブのみが機能する
-    if (t.dataset.target === 'players') {
-      tabs.forEach(x => x.setAttribute('aria-selected', 'false'));
-      t.setAttribute('aria-selected', 'true');
-      state.mode = 'players';
-      render();
-    }
+    tabs.forEach(x => x.setAttribute('aria-selected', 'false'));
+    t.setAttribute('aria-selected', 'true');
+    state.mode = t.dataset.target === 'teams' ? 'teams' : 'players';
+    render();
   });
 });
 
@@ -91,29 +92,32 @@ window.addEventListener('keydown', (e) => {
    ------------------------- */
 function filterItems() {
   const q = state.q.trim().toLowerCase();
-  let items = samplePlayers.slice();
+  let items = state.mode === 'players' ? samplePlayers.slice() : sampleTeams.slice();
 
-  if (!q && !state.division && !state.numMax) {
+  // プレイヤー表示モードで、検索条件が何もない場合は空の配列を返す
+  if (state.mode === 'players' && !q && !state.division && !state.numMax) {
     return [];
   }
 
   if (state.division) items = items.filter(it => (it.division || '').toLowerCase() === state.division.toLowerCase());
   // 番号完全一致フィルタ
-  if (state.numMax !== '' && state.numMax != null) {
+  if (state.mode === 'players' && state.numMax !== '' && state.numMax != null) {
     const target = Number(state.numMax);
     if (!isNaN(target)) {
       items = items.filter(it => Number(it.number) === target);
     }
   }
 
-  // クエリ検索（名前、英語名のみ）
+  // クエリ検索（名前、チーム名）
   if (q) {
     const tokens = q.split(/\s+/);
     items = items.filter(it => {
-      const hay = `${it.name || ''} ${it.name_en || ''}`.toLowerCase();
+      const hay = `${it.name || ''} ${it.team || ''} ${it.name_en || ''} ${it.city || ''} ${it.name} ${it.division || ''}`.toLowerCase();
       return tokens.every(t => hay.includes(t));
     });
   }
+
+  // ソート処理は削除（デフォルトの順）
 
   return items;
 }
@@ -122,16 +126,21 @@ function filterItems() {
    レンダリング
    ------------------------- */
 function render() {
+  // summary
   document.querySelectorAll('.tab').forEach(t => {
-    t.setAttribute('aria-selected', t.dataset.target === 'players');
+    if ((t.dataset.target === 'players' && state.mode === 'players') || (t.dataset.target === 'teams' && state.mode === 'teams')) {
+      t.setAttribute('aria-selected', 'true');
+    } else t.setAttribute('aria-selected', 'false');
   });
 
   const filtered = filterItems();
   countEl.textContent = filtered.length;
-  summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
+  summaryEl.innerHTML = `${state.mode === 'players' ? '選手' : 'チーム'}を表示中 — 全 <strong>${filtered.length}</strong> 件`;
   updateActiveFilters();
 
-  renderPlayers(filtered);
+  // ページング処理を削除し、フィルタリングされた全件を描画
+  if (state.mode === 'players') renderPlayers(filtered);
+  else renderTeams(filtered);
 }
 
 function updateActiveFilters() {
@@ -191,6 +200,50 @@ function renderPlayers(players) {
   });
 }
 
+/* チーム表示 */
+function renderTeams(teams) {
+  const wrapper = document.createElement('div');
+  wrapper.className = state.viewGrid ? 'result-grid' : '';
+  if (!state.viewGrid) {
+    const table = document.createElement('table');
+    table.innerHTML = `<thead><tr><th>チーム</th><th>ニックネーム</th><th>所在地</th><th>創設年</th><th></th></tr></thead><tbody></tbody>`;
+    teams.forEach(t => {
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${escapeHtml(t.name)}</td><td>${t.nickname}</td><td>${escapeHtml(t.city)}</td><td>${t.founded}</td><td><button class="btn small" data-id="${t.id}" data-type="team">詳細</button></td>`;
+      table.querySelector('tbody').appendChild(row);
+    });
+    wrapper.appendChild(table);
+  } else {
+    teams.forEach(t => {
+      const c = document.createElement('article');
+      c.className = 'card';
+      c.tabIndex = 0;
+      c.innerHTML = `
+        <div style="display:flex;gap:12px;align-items:center">
+          <div class="team-badge">${escapeHtml(t.name.split(' ').map(s=>s[0]).join('').slice(0,2))}</div>
+          <div>
+            <div style="font-weight:700">${escapeHtml(t.name)}</div>
+            <div class="meta">${escapeHtml(t.nickname)}</div>
+            <div class="muted">創設 ${t.founded}</div>
+          </div>
+        </div>
+      `;
+      c.addEventListener('click', () => openModalTeam(t.id));
+      c.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') openModalTeam(t.id)
+      });
+      wrapper.appendChild(c);
+    });
+  }
+
+  resultsArea.innerHTML = '';
+  resultsArea.appendChild(wrapper);
+
+  resultsArea.querySelectorAll('button[data-type="team"]').forEach(btn => {
+    btn.addEventListener('click', (e) => openModalTeam(e.currentTarget.dataset.id));
+  });
+}
+
 /* -------------------------
    モーダル（詳細）表示
    ------------------------- */
@@ -212,6 +265,7 @@ function openModalPlayer(id) {
             <div class="muted" style="margin-top:8px">出身校 / 高校時部活</div>
             <div>${p.almaMater} / ${p.highSchoolClubActivities}</div>
           </div>
+          <div style="margin-top:8px"><button class="btn" id="openTeamFromPlayer">チーム詳細を開く</button></div>
         </div>
       </div>
     </div>
@@ -224,6 +278,56 @@ function openModalPlayer(id) {
   backdrop.addEventListener('click', (e) => {
     if (e.target === backdrop) closeModal();
   });
+  const openTeamBtn = modalRoot.querySelector('#openTeamFromPlayer');
+  openTeamBtn.addEventListener('click', () => {
+    closeModal();
+    // チーム詳細を開く
+    const team = sampleTeams.find(t => t.name === p.team);
+    if (team) openModalTeam(team.id);
+  });
+  window.addEventListener('keydown', escHandler);
+}
+
+function openModalTeam(id) {
+  const t = sampleTeams.find(x => x.id === id);
+  if (!t) return;
+  modalRoot.innerHTML = `
+      <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="チーム詳細">
+        <div class="modal">
+          <button class="close" id="modalClose">閉じる</button>
+          <h2>${escapeHtml(t.name)} <span class="muted">(${escapeHtml(t.city)})</span></h2>
+          <div class="muted">ニックネーム: ${escapeHtml(t.nickname)} </div>
+          <div class="muted">創立年度:${escapeHtml(t.founded)}年</div>
+          <div class="muted">ヘッドコーチ: ${escapeHtml(t.coach)}</div>
+          <div class="muted">チームカラー: ${escapeHtml(t.color)}</div>
+          <hr style="border:none;height:1px;background:rgba(5, 4, 4, 0.03);margin:12px 0"></hr>
+        </div>
+      </div>
+    `;
+  // list players
+  const lst = modalRoot.querySelector('#teamPlayersList');
+  samplePlayers.filter(p => p.team === t.name).forEach(p => {
+    const li = document.createElement('li');
+    li.innerHTML = `<button class="btn-player" data-id="${p.id}" data-type="player-inline">#${p.number} ${escapeHtml(p.name)} ${p.position} ${p.grade}年 </button>`;
+  });
+
+  modalRoot.setAttribute('aria-hidden', 'false');
+  const backdrop = modalRoot.querySelector('.modal-backdrop');
+  const close = modalRoot.querySelector('#modalClose');
+  close.focus();
+  close.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+
+  modalRoot.querySelectorAll('button[data-type="player-inline"]').forEach(b => {
+    b.addEventListener('click', (e) => {
+      const id = e.currentTarget.dataset.id;
+      closeModal();
+      setTimeout(() => openModalPlayer(id), 120);
+    });
+  });
+
   window.addEventListener('keydown', escHandler);
 }
 
