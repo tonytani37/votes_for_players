@@ -21,7 +21,10 @@ let samplePlayers = [];
 // JSONファイルを読み込み
 async function loadData() {
   try {
-    const playersRes = await fetch("http://127.0.0.1:5000/players"); // APIのエンドポイントに変更
+    // const playersRes = await fetch("http://127.0.0.1:5000/players"); // APIのエンドポイントに変更
+    // const playersRes = await fetch("http://localhost:8080/players"); // APIのエンドポイントに変更
+    const playersRes = await fetch("https://players-api-281456272382.us-central1.run.app/players"); // APIのエンドポイントに変更
+
     samplePlayers = await playersRes.json();
     render(); // データ取得後に初回描画
   } catch (err) {
@@ -53,7 +56,7 @@ const activeFiltersEl = document.getElementById('activeFilters');
 const summaryEl = document.getElementById('summary');
 const modalRoot = document.getElementById('modalRoot');
 const tabs = document.querySelectorAll('.tab');
-const toggleViewBtn = document.getElementById('toggleView');
+// const toggleViewBtn = document.getElementById('toggleView');
 const resetBtn = document.getElementById('resetFilters');
 
 /* -------------------------
@@ -88,10 +91,10 @@ resetBtn.addEventListener('click', () => {
   render();
 });
 
-toggleViewBtn.addEventListener('click', () => {
-  state.viewGrid = !state.viewGrid;
-  render();
-});
+// toggleViewBtn.addEventListener('click', () => {
+//   state.viewGrid = !state.viewGrid;
+//   render();
+// });
 
 /* キーボードショートカット */
 window.addEventListener('keydown', (e) => {
@@ -217,7 +220,7 @@ function openModalPlayer(id) {
       <div class="modal">
         <div style="display:flex; align-items:flex-start; gap: 24px;">
             <div style="display:flex; flex-direction:column; align-items:center;">
-                <img src="https://bleague.bl.kuroco-img.app/v=2025091914/files/user/roster/721/2025-26/30400_01.jpg" style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
+                <img src="${p.img}" style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
                 <br>
                 <button class="btn" id="modalClose">投票する</button>
             </div>
