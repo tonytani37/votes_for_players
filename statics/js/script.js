@@ -5,15 +5,30 @@ let sampleTeams = [];
 let samplePlayers = [];
 
 // JSONファイルを読み込み
+// async function loadData() {
+//   try {
+//     const playersRes = await fetch("statics/json/players.json");
+//     samplePlayers = await playersRes.json();
+//     render(); // データ取得後に初回描画
+//   } catch (err) {
+//     console.error("JSON load error:", err);
+//   }
+// }
+/* -------------------------
+   サンプルデータ（実運用時はAPIから取得）
+   ------------------------- */
+
+// JSONファイルを読み込み
 async function loadData() {
   try {
-    const playersRes = await fetch("statics/json/players.json");
+    const playersRes = await fetch("http://127.0.0.1:5000/players"); // APIのエンドポイントに変更
     samplePlayers = await playersRes.json();
     render(); // データ取得後に初回描画
   } catch (err) {
-    console.error("JSON load error:", err);
+    console.error("API load error:", err);
   }
 }
+
 
 /* -------------------------
    基本状態
@@ -150,7 +165,7 @@ function renderPlayers(players) {
     // テーブル表示
     const table = document.createElement('table');
     const thead = document.createElement('thead');
-    thead.innerHTML = `<tr><th>番号</th><th>選手名</th><th>チーム</th><th>学年</th><th>ポジション</th><th></th></tr>`;
+    thead.innerHTML = `<tr><th>番号</th><th>選手名</th><th>チーム</th><th>生年月日</th><th>ポジション</th><th></th></tr>`;
     table.appendChild(thead);
     const tbody = document.createElement('tbody');
     players.forEach(p => {
@@ -171,7 +186,7 @@ function renderPlayers(players) {
           <div>
             <div style="font-weight:700">${escapeHtml(p.name)}</div>
             <div class="meta">${escapeHtml(p.team)} ${p.position}</div>
-            <div class="meta">${p.grade}年</div>
+            <div class="meta">生年月日:${p.grade}</div>
           </div>
         </div>
       `;
@@ -200,16 +215,23 @@ function openModalPlayer(id) {
   modalRoot.innerHTML = `
     <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="選手詳細">
       <div class="modal">
-        <button class="close" id="modalClose">閉じる</button>
+        <div style="display:flex; align-items:flex-start; gap: 24px;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <img src="https://bleague.bl.kuroco-img.app/v=2025091914/files/user/roster/721/2025-26/30400_01.jpg" style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
+                <br>
+                <button class="btn" id="modalClose">投票する</button>
+            </div>
+        <div>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
-        <div class="muted">チーム: ${escapeHtml(p.team)} ・ ポジション: ${p.position} ・ ${p.grade} 年</div>
+        <div class="muted">チーム: ${escapeHtml(p.team)}</div>
+        <div class="muted">ポジション: ${p.position}</div>
+        <div class="muted">生年月日:${p.grade}</div>
         <hr style="border:none;height:1px;background:rgba(255,255,255,0.03);margin:12px 0">
         <div style="display:flex;gap:18px;flex-wrap:wrap">
           <div style="min-width:180px">
             <div class="muted">身長 / 体重</div>
             <div style="font-weight:700">${p.height} cm / ${p.weight} kg</div>
-
-            <div class="muted" style="margin-top:8px">出身校 / 高校時部活</div>
+            <div class="muted" style="margin-top:8px">出身校 / 出身地</div>
             <div>${p.almaMater} / ${p.highSchoolClubActivities}</div>
           </div>
         </div>
