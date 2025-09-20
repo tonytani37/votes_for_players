@@ -221,9 +221,18 @@ function openModalPlayer(id) {
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <img src=${p.img} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
                 <br>
-                <button class="btn" id="modalClose">投票する</button>
+                  <!-- 投票ボタン -->
+                  <button class="btn" id="voteBtn">投票する</button>
+
+                  <!-- メッセージ（最初は非表示） -->
+                  <div id="thankyouMessage" style="display:none; padding:20px; border:1px solid #ccc; margin-top:10px; background:#f9f9f9;">
+                    <p>投票ありがとう！</p>
+                    <button id="backBtn">OK</button>
+                  </div>
             </div>
         <div>
+
+        <button class="btn" id="modalClose">閉じる</button>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
         <div class="muted">チーム: ${escapeHtml(p.team)}</div>
         <div class="muted">ポジション: ${p.position}</div>
@@ -249,6 +258,46 @@ function openModalPlayer(id) {
     if (e.target === backdrop) closeModal();
   });
   window.addEventListener('keydown', escHandler);
+
+ // ここから追加したコード
+  const voteBtn = document.getElementById("voteBtn");
+  if (voteBtn) {
+    voteBtn.addEventListener("click", () => {
+      // APIへの投票処理（今回は省略）
+      // ...
+      
+      // モーダルを閉じる
+      closeModal();
+      
+      // 投票メッセージを表示する
+      showThankYouMessage();
+    });
+  }
+
+
+function showThankYouMessage() {
+  const messageArea = document.createElement("div");
+  messageArea.id = "thankYouModal";
+  messageArea.innerHTML = `
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="投票完了">
+      <div class="modal" style="width: auto;">
+        <div style="text-align: center;">
+          <p>投票ありがとうございます！</p>
+          <button id="backBtn" class="btn">OK</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(messageArea);
+  
+  const backBtn = document.getElementById("backBtn");
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      // 画面をリセットして初期画面に戻る
+      window.location.reload();
+    });
+  }
+}
 }
 
 function closeModal() {
@@ -260,6 +309,7 @@ function closeModal() {
 function escHandler(e) {
   if (e.key === 'Escape') closeModal();
 }
+
 
 /* -------------------------
    ユーティリティ
