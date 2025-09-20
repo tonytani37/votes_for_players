@@ -5,28 +5,34 @@ fetch("statics/json/config.json")
   .then(res => res.json())
   .then(config => {
     api_url = config.API_URL;
-    loadData();
+    loadData(); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
     console.error("config.json の読み込み失敗:", err);
   });
 
 /* -------------------------
-   Sample Data (In production, this is fetched from the API)
+   Data
    ------------------------- */
 let samplePlayers = [];
 
-// Fetch player data from MongoDB
+// Fetch player data from MongoDB (初回/再ロードのみ)
 async function loadData() {
   try {
+    // 🔽 API呼び出し前にローディング表示
+    document.getElementById('loading').classList.remove('hidden');
+    document.getElementById('content').style.display = 'none';
+
     const playersRes = await fetch(api_url);
     samplePlayers = await playersRes.json();
+
     render();
   }
   catch (err) {
-    // console.error("API load error:", err);
+    console.error("API load error:", err);
   }
   finally {
+    // 🔽 API応答が返ったらローディングを消す
     document.getElementById('loading').classList.add('hidden');
     document.getElementById('content').style.display = 'block';
   }
@@ -74,7 +80,7 @@ tabs.forEach(t => {
 [qEl, divisionEl, numMaxEl].forEach(el => {
   el.addEventListener('input', (e) => {
     state[e.target.id] = e.target.value;
-    render();
+    render(); // APIを叩かずフロントでフィルタ
   });
 });
 
@@ -104,15 +110,17 @@ function filterItems() {
   let items = samplePlayers.slice();
 
   if (!q && !state.division && !state.numMax) {
-    return []; // フィルタが何もない場合は空の配列を返す
+    return []; // フィルタが何もない場合は空
   }
 
-  if (state.division) items = items.filter(it => (it.division || '').toLowerCase() === state.division.toLowerCase());
+  if (state.division) {
+    items = items.filter(it => (it.division || '').toLowerCase() === state.division.toLowerCase());
+  }
+
+  // 🔽 番号は部分一致
   if (state.numMax !== '' && state.numMax != null) {
-    const target = Number(state.numMax);
-    if (!isNaN(target)) {
-      items = items.filter(it => Number(it.number) === target);
-    }
+    const target = String(state.numMax);
+    items = items.filter(it => String(it.number).includes(target));
   }
 
   if (q) {
@@ -136,8 +144,7 @@ function render() {
 
   const filtered = filterItems();
   countEl.textContent = filtered.length;
-  
-  // フィルタがない場合はテキストを変更
+
   const hasFilters = state.q || state.division || state.numMax;
   if (hasFilters) {
     summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
@@ -153,7 +160,7 @@ function updateActiveFilters() {
   const parts = [];
   if (state.q) parts.push(`検索："${state.q}"`);
   if (state.division) parts.push(`Division: ${state.division}`);
-  if (state.numMax) parts.push(`番号 = ${state.numMax}`);
+  if (state.numMax) parts.push(`番号に「${state.numMax}」を含む`);
   activeFiltersEl.textContent = parts.length ? `フィルタ： ${parts.join(' / ')}` : 'フィルタ：なし';
 }
 
@@ -206,6 +213,8 @@ function renderPlayers(players) {
 /* -------------------------
    Modal (Details)
    ------------------------- */
+// （既存の openModalPlayer / votePlayer / showThankYouMessage / showErrorMessage / closeModal / escHandler / escapeHtml をそのまま利用）
+
 function openModalPlayer(id) {
   const p = samplePlayers.find(x => x.id === id);
   if (!p) return;
@@ -217,11 +226,6 @@ function openModalPlayer(id) {
                 <img src=${p.img} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
                 <br>
                   <button class="btn" id="voteBtn">投票する</button>
-
-                  <div id="thankyouMessage" style="display:none; padding:20px; border:1px solid #ccc; margin-top:10px; background:#f9f9f9;">
-                    <p>投票ありがとう！</p>
-                    <button id="backBtn">初期画面へ戻る</button>
-                  </div>
             </div>
         <div>
 
@@ -230,15 +234,6 @@ function openModalPlayer(id) {
         <div class="muted">チーム: ${escapeHtml(p.team)}</div>
         <div class="muted">ポジション: ${p.position}</div>
         <div class="muted">生年月日:${p.grade}</div>
-        <hr style="border:none;height:1px;background:rgba(255,255,255,0.03);margin:12px 0">
-        <div style="display:flex;gap:18px;flex-wrap:wrap">
-          <div style="min-width:180px">
-            <div class="muted">身長 / 体重</div>
-            <div style="font-weight:700">${p.height} cm / ${p.weight} kg</div>
-            <div class="muted" style="margin-top:8px">出身校 / 出身地</div>
-            <div>${p.almaMater} / ${p.highSchoolClubActivities}</div>
-          </div>
-        </div>
       </div>
     </div>
   `;
@@ -251,87 +246,39 @@ function openModalPlayer(id) {
     if (e.target === backdrop) closeModal();
   });
   window.addEventListener('keydown', escHandler);
-  
+
   const voteBtn = document.getElementById("voteBtn");
   if (voteBtn) {
-      voteBtn.addEventListener("click", () => {
-          votePlayer(p.name);
-      });
-  }
-}
-
-async function votePlayer(playerName) {
-    try {
-        const response = await fetch(api_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ name: playerName })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        console.log("投票成功:", result.message);
-        
-        closeModal();
-        showThankYouMessage();
-    } catch (error) {
-        console.error("投票失敗:", error);
-        closeModal();
-        showErrorMessage();
-    }
-}
-
-function showThankYouMessage() {
-  const messageArea = document.createElement("div");
-  messageArea.id = "thankYouModal";
-  messageArea.innerHTML = `
-    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="投票完了">
-      <div class="modal" style="width: auto;">
-        <div style="text-align: center;">
-          <p>投票ありがとうございます！</p>
-          <button id="backBtn" class="btn">OK</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.body.appendChild(messageArea);
-  
-  const backBtn = document.getElementById("backBtn");
-  if (backBtn) {
-    backBtn.addEventListener("click", () => {
-      window.location.reload();
+    voteBtn.addEventListener("click", () => {
+      votePlayer(p.name);
     });
   }
 }
 
-function showErrorMessage() {
-    const messageArea = document.createElement("div");
-    messageArea.id = "errorModal";
-    messageArea.innerHTML = `
-        <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
-          <div class="modal" style="width: auto;">
-            <div style="text-align: center;">
-              <p>投票に失敗しました。時間をおいて再度お試しください。</p>
-              <button id="backBtn" class="btn">OK</button>
-            </div>
-          </div>
-        </div>
-    `;
-    document.body.appendChild(messageArea);
-
-    const backBtn = document.getElementById("backBtn");
-    if (backBtn) {
-        backBtn.addEventListener("click", () => {
-            document.body.removeChild(messageArea);
-        });
-    }
+async function votePlayer(playerName) {
+  try {
+    const response = await fetch(api_url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: playerName })
+    });
+    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+    closeModal();
+    showThankYouMessage();
+  } catch (error) {
+    console.error("投票失敗:", error);
+    closeModal();
+    showErrorMessage();
+  }
 }
 
+function showThankYouMessage() {
+  alert("投票ありがとうございます！");
+}
+
+function showErrorMessage() {
+  alert("投票に失敗しました。時間をおいて再度お試しください。");
+}
 
 function closeModal() {
   modalRoot.innerHTML = '';
@@ -342,7 +289,6 @@ function closeModal() {
 function escHandler(e) {
   if (e.key === 'Escape') closeModal();
 }
-
 
 /* -------------------------
    Utility Functions
