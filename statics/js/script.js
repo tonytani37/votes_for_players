@@ -1,12 +1,10 @@
 // config.jsonから設定を読み込み
-let api_url = "";  // グローバル変数として用意
+let api_url = "";
 
 fetch("statics/json/config.json")
   .then(res => res.json())
   .then(config => {
     api_url = config.API_URL;
-    // config 読み込みが完了してからデータを取得
-    // console.log("api_url: ",api_url)
     loadData();
   })
   .catch(err => {
@@ -14,29 +12,31 @@ fetch("statics/json/config.json")
   });
 
 /* -------------------------
-   サンプルデータ（実運用時はAPIから取得）
+   Sample Data (In production, this is fetched from the API)
    ------------------------- */
-// let sampleTeams = [];
 let samplePlayers = [];
-// mongoDBから選手データを読み込み
+
+// Fetch player data from MongoDB
 async function loadData() {
   try {
-    // const playersRes = await fetch("http://localhost:8080/players"); // APIのエンドポイントに変更(ローカルテスト用)
-    const playersRes = await fetch(api_url); // APIのエンドポイントに変更
+    const playersRes = await fetch(api_url);
     samplePlayers = await playersRes.json();
-    render(); // データ取得後に初回描画
+    render();
   }
   catch (err) {
-    // APIからのマスタ読み込みは成功しているが、なぜかエラーが表示されるのでとりあえずコメントアウト
     // console.error("API load error:", err);
   }
+  finally {
+    document.getElementById('loading').classList.add('hidden');
+    document.getElementById('content').style.display = 'block';
   }
+}
 
 /* -------------------------
-   基本状態
+   State Management
    ------------------------- */
 let state = {
-  mode: 'players', // players | teams
+  mode: 'players',
   q: '',
   division: '',
   numMax: '',
@@ -44,7 +44,7 @@ let state = {
 };
 
 /* -------------------------
-   DOM
+   DOM Elements
    ------------------------- */
 const qEl = document.getElementById('q');
 const divisionEl = document.getElementById('division');
@@ -55,15 +55,13 @@ const activeFiltersEl = document.getElementById('activeFilters');
 const summaryEl = document.getElementById('summary');
 const modalRoot = document.getElementById('modalRoot');
 const tabs = document.querySelectorAll('.tab');
-// const toggleViewBtn = document.getElementById('toggleView');
 const resetBtn = document.getElementById('resetFilters');
 
 /* -------------------------
-   イベント登録
+   Event Listeners
    ------------------------- */
 tabs.forEach(t => {
   t.addEventListener('click', () => {
-    // 選手タブのみが機能する
     if (t.dataset.target === 'players') {
       tabs.forEach(x => x.setAttribute('aria-selected', 'false'));
       t.setAttribute('aria-selected', 'true');
@@ -90,12 +88,7 @@ resetBtn.addEventListener('click', () => {
   render();
 });
 
-// toggleViewBtn.addEventListener('click', () => {
-//   state.viewGrid = !state.viewGrid;
-//   render();
-// });
-
-/* キーボードショートカット */
+// Keyboard shortcut
 window.addEventListener('keydown', (e) => {
   if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
     e.preventDefault();
@@ -104,18 +97,17 @@ window.addEventListener('keydown', (e) => {
 });
 
 /* -------------------------
-   検索 / フィルタ処理
+   Search / Filter Logic
    ------------------------- */
 function filterItems() {
   const q = state.q.trim().toLowerCase();
   let items = samplePlayers.slice();
 
   if (!q && !state.division && !state.numMax) {
-    return [];
+    return []; // フィルタが何もない場合は空の配列を返す
   }
 
   if (state.division) items = items.filter(it => (it.division || '').toLowerCase() === state.division.toLowerCase());
-  // 番号完全一致フィルタ
   if (state.numMax !== '' && state.numMax != null) {
     const target = Number(state.numMax);
     if (!isNaN(target)) {
@@ -123,7 +115,6 @@ function filterItems() {
     }
   }
 
-  // クエリ検索（名前、英語名のみ）
   if (q) {
     const tokens = q.split(/\s+/);
     items = items.filter(it => {
@@ -136,7 +127,7 @@ function filterItems() {
 }
 
 /* -------------------------
-   レンダリング
+   Rendering
    ------------------------- */
 function render() {
   document.querySelectorAll('.tab').forEach(t => {
@@ -145,9 +136,16 @@ function render() {
 
   const filtered = filterItems();
   countEl.textContent = filtered.length;
-  summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
-  updateActiveFilters();
+  
+  // フィルタがない場合はテキストを変更
+  const hasFilters = state.q || state.division || state.numMax;
+  if (hasFilters) {
+    summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
+  } else {
+    summaryEl.innerHTML = `検索条件を入力してください`;
+  }
 
+  updateActiveFilters();
   renderPlayers(filtered);
 }
 
@@ -159,12 +157,10 @@ function updateActiveFilters() {
   activeFiltersEl.textContent = parts.length ? `フィルタ： ${parts.join(' / ')}` : 'フィルタ：なし';
 }
 
-/* プレイヤー表示 */
 function renderPlayers(players) {
   const wrapper = document.createElement('div');
   wrapper.className = state.viewGrid ? 'result-grid' : '';
   if (!state.viewGrid) {
-    // テーブル表示
     const table = document.createElement('table');
     const thead = document.createElement('thead');
     thead.innerHTML = `<tr><th>番号</th><th>選手名</th><th>チーム</th><th>生年月日</th><th>ポジション</th><th></th></tr>`;
@@ -202,14 +198,13 @@ function renderPlayers(players) {
   resultsArea.innerHTML = '';
   resultsArea.appendChild(wrapper);
 
-  // attach detail buttons (for table view)
   resultsArea.querySelectorAll('button[data-type="player"]').forEach(btn => {
     btn.addEventListener('click', (e) => openModalPlayer(e.currentTarget.dataset.id));
   });
 }
 
 /* -------------------------
-   モーダル（詳細）表示
+   Modal (Details)
    ------------------------- */
 function openModalPlayer(id) {
   const p = samplePlayers.find(x => x.id === id);
@@ -221,13 +216,11 @@ function openModalPlayer(id) {
             <div style="display:flex; flex-direction:column; align-items:center;">
                 <img src=${p.img} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
                 <br>
-                  <!-- 投票ボタン -->
                   <button class="btn" id="voteBtn">投票する</button>
 
-                  <!-- メッセージ（最初は非表示） -->
                   <div id="thankyouMessage" style="display:none; padding:20px; border:1px solid #ccc; margin-top:10px; background:#f9f9f9;">
                     <p>投票ありがとう！</p>
-                    <button id="backBtn">OK</button>
+                    <button id="backBtn">初期画面へ戻る</button>
                   </div>
             </div>
         <div>
@@ -258,22 +251,40 @@ function openModalPlayer(id) {
     if (e.target === backdrop) closeModal();
   });
   window.addEventListener('keydown', escHandler);
-
- // ここから追加したコード
+  
   const voteBtn = document.getElementById("voteBtn");
   if (voteBtn) {
-    voteBtn.addEventListener("click", () => {
-      // APIへの投票処理（今回は省略）
-      // ...
-      
-      // モーダルを閉じる
-      closeModal();
-      
-      // 投票メッセージを表示する
-      showThankYouMessage();
-    });
+      voteBtn.addEventListener("click", () => {
+          votePlayer(p.name);
+      });
   }
+}
 
+async function votePlayer(playerName) {
+    try {
+        const response = await fetch(api_url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: playerName })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log("投票成功:", result.message);
+        
+        closeModal();
+        showThankYouMessage();
+    } catch (error) {
+        console.error("投票失敗:", error);
+        closeModal();
+        showErrorMessage();
+    }
+}
 
 function showThankYouMessage() {
   const messageArea = document.createElement("div");
@@ -293,12 +304,34 @@ function showThankYouMessage() {
   const backBtn = document.getElementById("backBtn");
   if (backBtn) {
     backBtn.addEventListener("click", () => {
-      // 画面をリセットして初期画面に戻る
       window.location.reload();
     });
   }
 }
+
+function showErrorMessage() {
+    const messageArea = document.createElement("div");
+    messageArea.id = "errorModal";
+    messageArea.innerHTML = `
+        <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
+          <div class="modal" style="width: auto;">
+            <div style="text-align: center;">
+              <p>投票に失敗しました。時間をおいて再度お試しください。</p>
+              <button id="backBtn" class="btn">OK</button>
+            </div>
+          </div>
+        </div>
+    `;
+    document.body.appendChild(messageArea);
+
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.addEventListener("click", () => {
+            document.body.removeChild(messageArea);
+        });
+    }
 }
+
 
 function closeModal() {
   modalRoot.innerHTML = '';
@@ -312,7 +345,7 @@ function escHandler(e) {
 
 
 /* -------------------------
-   ユーティリティ
+   Utility Functions
    ------------------------- */
 function escapeHtml(s) {
   if (!s && s !== 0) return '';
@@ -325,5 +358,5 @@ function escapeHtml(s) {
   }[m]));
 }
 
-/* 初期レンダリング */
-loadData(); // JSON読み込み後にrender()
+/* Initial Rendering */
+loadData();
