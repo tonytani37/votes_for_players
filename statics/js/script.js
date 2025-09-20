@@ -273,11 +273,49 @@ async function votePlayer(playerName) {
 }
 
 function showThankYouMessage() {
-  alert("投票ありがとうございます！");
+  const messageArea = document.createElement("div");
+  messageArea.id = "thankYouModal";
+  messageArea.innerHTML = `
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="投票完了">
+      <div class="modal" style="width: auto;">
+        <div style="text-align: center;">
+          <p>投票ありがとうございます！</p>
+          <button id="backBtn" class="btn">OK</button>
+        </div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(messageArea);
+
+    const backBtn = document.getElementById("backBtn");
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      window.location.reload();
+    });
+  }
 }
 
 function showErrorMessage() {
-  alert("投票に失敗しました。時間をおいて再度お試しください。");
+    const messageArea = document.createElement("div");
+    messageArea.id = "errorModal";
+    messageArea.innerHTML = `
+        <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
+          <div class="modal" style="width: auto;">
+            <div style="text-align: center;">
+              <p>投票に失敗しました。時間をおいて再度お試しください。</p>
+              <button id="backBtn" class="btn">OK</button>
+            </div>
+          </div>
+        </div>
+    `;
+    document.body.appendChild(messageArea);
+
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.addEventListener("click", () => {
+            document.body.removeChild(messageArea);
+        });
+    }
 }
 
 function closeModal() {
