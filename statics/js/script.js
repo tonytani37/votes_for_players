@@ -1,37 +1,36 @@
+// config.jsonから設定を読み込み
+let api_url = "";  // グローバル変数として用意
+
+fetch("statics/json/config.json")
+  .then(res => res.json())
+  .then(config => {
+    api_url = config.API_URL;
+    // config 読み込みが完了してからデータを取得
+    // console.log("api_url: ",api_url)
+    loadData();
+  })
+  .catch(err => {
+    console.error("config.json の読み込み失敗:", err);
+  });
+
 /* -------------------------
    サンプルデータ（実運用時はAPIから取得）
    ------------------------- */
-let sampleTeams = [];
+// let sampleTeams = [];
 let samplePlayers = [];
-
-// JSONファイルを読み込み
-// async function loadData() {
-//   try {
-//     const playersRes = await fetch("statics/json/players.json");
-//     samplePlayers = await playersRes.json();
-//     render(); // データ取得後に初回描画
-//   } catch (err) {
-//     console.error("JSON load error:", err);
-//   }
-// }
-/* -------------------------
-   サンプルデータ（実運用時はAPIから取得）
-   ------------------------- */
-
-// JSONファイルを読み込み
+// mongoDBから選手データを読み込み
 async function loadData() {
   try {
-    // const playersRes = await fetch("http://127.0.0.1:5000/players"); // APIのエンドポイントに変更
-    // const playersRes = await fetch("http://localhost:8080/players"); // APIのエンドポイントに変更
-    const playersRes = await fetch("https://players-api-281456272382.us-central1.run.app/players"); // APIのエンドポイントに変更
-
+    // const playersRes = await fetch("http://localhost:8080/players"); // APIのエンドポイントに変更(ローカルテスト用)
+    const playersRes = await fetch(api_url); // APIのエンドポイントに変更
     samplePlayers = await playersRes.json();
     render(); // データ取得後に初回描画
-  } catch (err) {
-    console.error("API load error:", err);
   }
-}
-
+  catch (err) {
+    // APIからのマスタ読み込みは成功しているが、なぜかエラーが表示されるのでとりあえずコメントアウト
+    // console.error("API load error:", err);
+  }
+  }
 
 /* -------------------------
    基本状態
@@ -220,7 +219,7 @@ function openModalPlayer(id) {
       <div class="modal">
         <div style="display:flex; align-items:flex-start; gap: 24px;">
             <div style="display:flex; flex-direction:column; align-items:center;">
-                <img src="${p.img}" style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
+                <img src=${p.img} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
                 <br>
                 <button class="btn" id="modalClose">投票する</button>
             </div>
