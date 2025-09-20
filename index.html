@@ -60,5 +60,16 @@
 <div id="modalRoot" aria-hidden="true"></div>
 
 <script type="module" src="statics/js/script.js"></script>
+<script>
+  window.onload = function() {
+    if (!sessionStorage.getItem("reloaded")) {
+      sessionStorage.setItem("reloaded", "true");
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem("reloaded");
+    }
+  };
+</script>
+
 </body>
 </html>
