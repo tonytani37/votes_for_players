@@ -1,3 +1,13 @@
+// 画面が開かれるたびにリロードする
+  window.onload = function() {
+    if (!sessionStorage.getItem("reloaded")) {
+      sessionStorage.setItem("reloaded", "true");
+      window.location.reload();
+    } else {
+      sessionStorage.removeItem("reloaded");
+    }
+  };
+
 // config.jsonから設定を読み込み
 let api_url = "";  // グローバル変数として用意
 
