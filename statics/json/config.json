@@ -1,3 +1,4 @@
 {
-  "API_URL":"https://players-api-281456272382.us-central1.run.app/players"
+  "API_URL":"https://players-api-281456272382.us-central1.run.app/players",
+  "RANKING_API_URL":"https://players-api-281456272382.us-central1.run.app/ranking"
 }

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="ja">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+    <title>投票結果ランキング</title>
+    <link rel="stylesheet" href="statics/css/ranking.css" />
+    <link rel="stylesheet" href="statics/css/style.css" />
+</head>
+<body>
+
+<header>
+    <div class="header-content">
+        <div></div> <!-- left spacer -->
+        <h1>投票結果ランキング</h1>
+        <!-- <a class="btn small" href="index.html" style="background-color: #FF7043;">投票ページへ</a> -->
+    </div>
+</header>
+<!-- ローディング画面 -->
+<div id="loading">
+  <div class="spinner"></div>
+  <p>読み込み中...</p>
+</div>
+
+<main>
+    <a class="btn small" href="index.html" >投票ページへ</a>
+    <!-- <div id="loading" class="spinner"></div> -->
+
+    <div id="rankingContainer" class="ranking-list hidden"></div>
+</main>
+
+<script src="statics/js/ranking.js"></script>
+
+</body>
+</html>
