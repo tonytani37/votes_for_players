@@ -17,14 +17,14 @@
 <header>
   <div id="content">
     <img src="statics/img/dragonflies.png" alt="logo" height="60" style="vertical-align:middle; margin-right:12px">
-    <a class="btn small" href="./ranking.html">投票結果</a>
+    <a class="btn" href="./ranking.html">投票結果</a>
   </div>
   <!-- <div style="margin-left:auto" class="kbd">⌘/Ctrl + K で検索フォーカス</div> -->
 </header>
 
 <div class="search-bar" role="search" aria-label="検索バー">
   <div class="tabs" role="tablist" aria-label="検索対象切替">
-    <button class="tab" role="tab" aria-selected="true" data-target="players">選手</button>
+    <button class="tab" role="tab" aria-selected="true" data-target="players" hidden>選手</button>
     <!-- <button class="tab" role="tab" aria-selected="false" data-target="teams">チーム</button> -->
   </div>
 </div>
@@ -41,7 +41,7 @@
         <input id="q" class="input" type="search" placeholder="選手名で検索" aria-label="フリーワード検索">
     </label>
     <label style="margin:0">
-      <input id="numMax" type="tel" min="0" placeholder="番号で検索" class="input small" style="width:50px" aria-label="番号上限">
+      <input id="numMax" type="tel" min="0" placeholder="番号で検索" class="input" style="width:50px" aria-label="番号上限">
     </label>
           <select id="division" class="input" aria-label="ブロック" hidden>
         <option value="" selected>地区指定(整備中)</option>
