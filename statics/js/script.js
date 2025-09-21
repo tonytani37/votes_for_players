@@ -217,13 +217,14 @@ function renderPlayers(players) {
 
 function openModalPlayer(id) {
   const p = samplePlayers.find(x => x.id === id);
+  const playerImgSrc = `statics/img/players/${p.imgTemp}`;
   if (!p) return;
   modalRoot.innerHTML = `
     <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="選手詳細">
       <div class="modal">
         <div style="display:flex; align-items:flex-start; gap: 24px;">
             <div style="display:flex; flex-direction:column; align-items:center;">
-                <img src=${p.img} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
+                <img src=${playerImgSrc} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
                 <br>
                   <button class="btn" id="voteBtn">投票する</button>
             </div>
