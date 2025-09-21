@@ -59,7 +59,7 @@ function renderRanking(ranking) {
         item.innerHTML = `
             <div class="rank">${currentRank}位</div>
             <div class="rank-name">${escapeHtml(player.name)}</div>
-            <div class="vote-count">${player.votes}票</div>
+            <div class="vote-count">${player.votes}</div>
         `;
         container.appendChild(item);
     });
