@@ -192,6 +192,16 @@ th{font-size:13px; color:var(--muted)}
     margin: 0 auto;
 }
 
+.content {
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: center;
+    align-items: center;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+
 /* tiny */
 label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
 .muted{color:var(--muted); font-size:13px}
