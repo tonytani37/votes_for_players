@@ -128,6 +128,8 @@ function filterItems() {
       return tokens.every(t => hay.includes(t));
     });
   }
+    // 🔽 ここにソート処理を追加する
+  items.sort((a, b) => a.number - b.number);
 
   return items;
 }
