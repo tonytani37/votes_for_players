@@ -1,5 +1,5 @@
 {
   "API_URL":"https://players-api-281456272382.us-central1.run.app/players",
-  "VOTE_URL":"https://players-api-281456272382.us-central1.run.app/vote"
+  "VOTE_URL":"https://players-api-281456272382.us-central1.run.app/vote",
   "RANKING_API_URL":"https://players-api-281456272382.us-central1.run.app/ranking"
 }
