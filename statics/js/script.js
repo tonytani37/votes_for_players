@@ -261,6 +261,8 @@ function openModalPlayer(id) {
 
 async function votePlayer(playerName) {
   try {
+     // 🔽 API呼び出し前にローディング表示
+    document.getElementById('loading').classList.remove('hidden');
     const response = await fetch(vote_url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -273,6 +275,10 @@ async function votePlayer(playerName) {
     console.error("投票に失敗しました:", error);
     closeModal();
     showErrorMessageVote();
+  }
+   finally {
+    // 🔽 API応答が返ったらローディングを消す
+    document.getElementById('loading').classList.add('hidden');
   }
 }
 
