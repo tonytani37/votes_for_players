@@ -29,9 +29,10 @@ async function loadData() {
     samplePlayers = await playersRes.json();
 
     render();
-  }
-  catch (err) {
+  } catch (err) {
     console.error("API load error:", err);
+    closeModal();
+    showErrorMessage();
   }
   finally {
     // 🔽 API応答が返ったらローディングを消す
@@ -269,7 +270,7 @@ async function votePlayer(playerName) {
     closeModal();
     showThankYouMessage();
   } catch (error) {
-    console.error("投票失敗:", error);
+    console.error("投票に失敗しました:", error);
     closeModal();
     showErrorMessage();
   }
@@ -305,7 +306,7 @@ function showErrorMessage() {
         <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
           <div class="modal" style="width: auto;">
             <div style="text-align: center;">
-              <p>投票に失敗しました。時間をおいて再度お試しください。</p>
+              <p>データベース接続ができませんでした。時間をおいて再度お試しください。</p>
               <button id="backBtn" class="btn">OK</button>
             </div>
           </div>
@@ -346,4 +347,4 @@ function escapeHtml(s) {
 }
 
 /* Initial Rendering */
-loadData();
+// loadData();
