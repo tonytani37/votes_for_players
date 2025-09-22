@@ -17,24 +17,35 @@ fetch("statics/json/config.json")
    Data
    ------------------------- */
 let samplePlayers = [];
-async function loadData(aip_url) {
+async function loadData(api_url) {
   try {
-    // ローディング表示など
     document.getElementById('loading').classList.remove('hidden');
 
-    const playersRes = await fetch(api_url);
-    samplePlayers = await playersRes.json();
+    // 1. sessionStorageからキャッシュされたデータを取得
+    const cachedData = sessionStorage.getItem('playersData');
+    if (cachedData) {
+      // キャッシュがあればそれを使用
+      samplePlayers = JSON.parse(cachedData);
+      // console.log('キャッシュされたデータを使用します。');
+    } else {
+      // キャッシュがなければAPIからデータを取得
+      const playersRes = await fetch(api_url);
+      samplePlayers = await playersRes.json();
+      
+      // 取得したデータをsessionStorageに保存
+      sessionStorage.setItem('playersData', JSON.stringify(samplePlayers));
+      // console.log('APIからデータを取得してキャッシュしました。');
+    }
+
     render();
   } catch (err) {
-    // console.error("API load error:", err);
+    console.error("API load error:", err);
     closeModal();
     showErrorMessage("データベース接続ができませんでした。時間をおいて再度お試しください。");
   } finally {
-    // ローディング解除はtry-catchのあとにfinallyでまとめる
     document.getElementById('loading').classList.add('hidden');
   }
 }
-
 
 /* -------------------------
    State Management
@@ -286,7 +297,7 @@ function showThankYouMessage() {
     <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="投票完了">
       <div class="modal" style="width: auto;">
         <div style="text-align: center;">
-          <p>投票ありがとうございます！</p>
+          <p>投票しました！</p>
           <button id="backBtn" class="btn">OK</button>
         </div>
       </div>
@@ -294,10 +305,22 @@ function showThankYouMessage() {
   `;
   document.body.appendChild(messageArea);
 
-    const backBtn = document.getElementById("backBtn");
+  const backBtn = document.getElementById("backBtn");
   if (backBtn) {
     backBtn.addEventListener("click", () => {
-      window.location.reload();
+      // 検索フォームと状態をリセット
+      qEl.value = '';
+      divisionEl.value = '';
+      numMaxEl.value = '';
+      state.q = '';
+      state.division = '';
+      state.numMax = '';
+      
+      // 画面を再描画して、検索結果をクリア
+      render();
+
+      // モーダルを削除
+      document.body.removeChild(messageArea);
     });
   }
 }
