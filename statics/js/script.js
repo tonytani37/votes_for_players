@@ -1,10 +1,12 @@
 // config.jsonから設定を読み込み
 let api_url = "";
+let vote_url = "";
 
 fetch("statics/json/config.json")
   .then(res => res.json())
   .then(config => {
     api_url = config.API_URL;
+    vote_url = config.VOTE_URL;
     loadData(); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
@@ -258,7 +260,7 @@ function openModalPlayer(id) {
 
 async function votePlayer(playerName) {
   try {
-    const response = await fetch(api_url, {
+    const response = await fetch(vote_url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ name: playerName })
