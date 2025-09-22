@@ -272,7 +272,7 @@ async function votePlayer(playerName) {
   } catch (error) {
     console.error("投票に失敗しました:", error);
     closeModal();
-    showErrorMessage();
+    showErrorMessageVote();
   }
 }
 
@@ -307,6 +307,29 @@ function showErrorMessage() {
           <div class="modal" style="width: auto;">
             <div style="text-align: center;">
               <p>データベース接続ができませんでした。時間をおいて再度お試しください。</p>
+              <button id="backBtn" class="btn">OK</button>
+            </div>
+          </div>
+        </div>
+    `;
+    document.body.appendChild(messageArea);
+
+    const backBtn = document.getElementById("backBtn");
+    if (backBtn) {
+        backBtn.addEventListener("click", () => {
+            document.body.removeChild(messageArea);
+        });
+    }
+}
+
+function showErrorMessageVote() {
+    const messageArea = document.createElement("div");
+    messageArea.id = "errorModal";
+    messageArea.innerHTML = `
+        <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
+          <div class="modal" style="width: auto;">
+            <div style="text-align: center;">
+              <p>投票ができませんでした。時間をおいて再度お試しください。</p>
               <button id="backBtn" class="btn">OK</button>
             </div>
           </div>
