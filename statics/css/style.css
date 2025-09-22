@@ -185,7 +185,8 @@ th{font-size:13px; color:var(--muted)}
 
 .header-content {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    justify-content: center;
     align-items: center;
     max-width: 300px;
     margin: 0 auto;
