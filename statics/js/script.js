@@ -23,7 +23,7 @@ async function loadData() {
   try {
     // 🔽 API呼び出し前にローディング表示
     document.getElementById('loading').classList.remove('hidden');
-    document.getElementById('content').style.display = 'none';
+    // document.getElementById('content').style.display = 'none';
 
     const playersRes = await fetch(api_url);
     samplePlayers = await playersRes.json();
@@ -37,7 +37,7 @@ async function loadData() {
   finally {
     // 🔽 API応答が返ったらローディングを消す
     document.getElementById('loading').classList.add('hidden');
-    document.getElementById('content').style.display = 'block';
+    // document.getElementById('content').style.display = 'block';
   }
 }
 
@@ -152,7 +152,7 @@ function render() {
   if (hasFilters) {
     summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
   } else {
-    summaryEl.innerHTML = `検索条件を入力してください`;
+    summaryEl.innerHTML = `選手を検索して投票してください`;
   }
 
   updateActiveFilters();
@@ -233,7 +233,7 @@ function openModalPlayer(id) {
             </div>
         <div>
 
-        <button class="btn" id="modalClose">閉じる</button>
+        <button class="btn" id="modalClose">もどる</button>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
         <div class="muted">チーム: ${escapeHtml(p.team)}</div>
         <div class="muted">ポジション: ${p.position}</div>

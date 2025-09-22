@@ -5,75 +5,47 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
 <title>広島ドラゴンフライズ Player of the Match 投票</title>
 <link rel="stylesheet" href="statics/css/style.css" />
-<!-- <link rel="stylesheet" href="statics/css/test.css" /> -->
 </head>
 <body>
-<!-- ローディング画面 -->
 <div id="loading">
   <div class="spinner"></div>
   <p>読み込み中...</p>
 </div>
 
-<!-- 本体コンテンツ -->
 <header>
-  <div id="content">
+  <!-- <div id="content"> -->
+  <div class="header-content">
     <img src="statics/img/dragonflies.png" alt="logo" height="60" style="vertical-align:middle; margin-right:12px">
-    <a class="btn" href="./ranking.html">投票結果</a>
+    <h1>Vote for Player　</h1>
+    <a class="btn small" href="./ranking.html">RESULTS</a>
   </div>
-  <!-- <div style="margin-left:auto" class="kbd">⌘/Ctrl + K で検索フォーカス</div> -->
-</header>
+  </header>
 
-<div class="search-bar" role="search" aria-label="検索バー">
-  <div class="tabs" role="tablist" aria-label="検索対象切替">
-    <button class="tab" role="tab" aria-selected="true" data-target="players" hidden>選手</button>
-    <!-- <button class="tab" role="tab" aria-selected="false" data-target="teams">チーム</button> -->
-  </div>
-</div>
-<div class="search-bar" role="search" aria-label="検索バー">
-  <div class="filters" aria-hidden="false">
-    <label style="margin:0">
-      <!-- <select id="division" class="input" aria-label="ブロック" hidden>
-        <option value="" selected>地区指定(整備中)</option>
-        <option value="a">A</option>
-        <option value="B">B</option>
-      </select>
-    </label> -->
-    <label style="margin:1">
-      <button id="resetFilters" class="btn small" title="フィルタリセット">リセット</button>
-    </label>
-    <label style="margin:1">
-        <input id="q" class="input" type="search" placeholder="選手名で検索" aria-label="フリーワード検索">
-    </label>
-    <label style="margin:0">
-      <input id="numMax" type="tel" min="0" placeholder="番号で検索" class="input" style="width:50px" aria-label="番号上限">
+<div class="main-content">
+  <section class="search-section">
     </label>
           <select id="division" class="input" aria-label="ブロック" hidden>
         <option value="" selected>地区指定(整備中)</option>
         <option value="a">A</option>
         <option value="B">B</option>
       </select>
-    <!-- <label style="margin:0">
-      <button id="resetFilters" class="btn small" title="フィルタリセット">リセット</button>
-    </label> -->
-  </div>
-</div>
+    <div class="search-input-container">
+      <input id="q" class="input" type="search" placeholder="選手名で検索" aria-label="フリーワード検索">
+      <input id="numMax" type="tel" min="0" placeholder="番号で検索" class="input" aria-label="番号で検索">
+    </div>
+        <label style="margin:1">
+      <button id="resetFilters" class="btn small" title="フィルタリセット">検索条件をリセットする</button>
 
-<div class="main">
+  </section>
   <section class="results" aria-live="polite">
- 
-    <br>
     <div class="list-controls">
       <div class="muted" id="summary">選手を表示中 — 全 <span id="count">0</span> 件</div>
       <div class="muted" id="activeFilters" hidden>フィルタ：なし</div>
     </div>
-      <!-- <button id="toggleView" class="btn small" style="margin-left:12px">グリッド切替</button> -->
-       <div id="resultsArea"></div>
-
-    <footer>
-      <div class="muted">選手名または番号(半角数字)を入力すると検索できます。</div>
-    </footer>
+    <div id="resultsArea"></div>
   </section>
 </div>
+
 <div class="content">
   <footer>
     <div class="muted" style="font-size:0.8em; margin-top:24px;">重要な注）本サイトはチーム公式と一切関係ありません。</div>
