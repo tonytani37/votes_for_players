@@ -7,7 +7,7 @@ fetch("statics/json/config.json")
   .then(config => {
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
-    loadData(); // 初回ロード時にAPIを叩く
+    loadData(api_url); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
     console.error("config.json の読み込み失敗:", err);
@@ -17,29 +17,24 @@ fetch("statics/json/config.json")
    Data
    ------------------------- */
 let samplePlayers = [];
-
-// Fetch player data from MongoDB (初回/再ロードのみ)
-async function loadData() {
+async function loadData(aip_url) {
   try {
-    // 🔽 API呼び出し前にローディング表示
+    // ローディング表示など
     document.getElementById('loading').classList.remove('hidden');
-    // document.getElementById('content').style.display = 'none';
 
     const playersRes = await fetch(api_url);
     samplePlayers = await playersRes.json();
-
     render();
   } catch (err) {
-    console.error("API load error:", err);
+    // console.error("API load error:", err);
     closeModal();
-    showErrorMessage();
-  }
-  finally {
-    // 🔽 API応答が返ったらローディングを消す
+    showErrorMessage("データベース接続ができませんでした。時間をおいて再度お試しください。");
+  } finally {
+    // ローディング解除はtry-catchのあとにfinallyでまとめる
     document.getElementById('loading').classList.add('hidden');
-    // document.getElementById('content').style.display = 'block';
   }
 }
+
 
 /* -------------------------
    State Management
@@ -274,7 +269,7 @@ async function votePlayer(playerName) {
   } catch (error) {
     console.error("投票に失敗しました:", error);
     closeModal();
-    showErrorMessageVote();
+    showErrorMessage("投票ができませんでした。時間をおいて再度お試しください。");
   }
    finally {
     // 🔽 API応答が返ったらローディングを消す
@@ -305,37 +300,14 @@ function showThankYouMessage() {
   }
 }
 
-function showErrorMessage() {
+function showErrorMessage(message) {
     const messageArea = document.createElement("div");
     messageArea.id = "errorModal";
     messageArea.innerHTML = `
         <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
           <div class="modal" style="width: auto;">
             <div style="text-align: center;">
-              <p>データベース接続ができませんでした。時間をおいて再度お試しください。</p>
-              <button id="backBtn" class="btn">OK</button>
-            </div>
-          </div>
-        </div>
-    `;
-    document.body.appendChild(messageArea);
-
-    const backBtn = document.getElementById("backBtn");
-    if (backBtn) {
-        backBtn.addEventListener("click", () => {
-            document.body.removeChild(messageArea);
-        });
-    }
-}
-
-function showErrorMessageVote() {
-    const messageArea = document.createElement("div");
-    messageArea.id = "errorModal";
-    messageArea.innerHTML = `
-        <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="エラー">
-          <div class="modal" style="width: auto;">
-            <div style="text-align: center;">
-              <p>投票ができませんでした。時間をおいて再度お試しください。</p>
+              <p>${message}</p>
               <button id="backBtn" class="btn">OK</button>
             </div>
           </div>
