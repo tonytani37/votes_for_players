@@ -1,12 +1,14 @@
 // config.jsonから設定を読み込み
 let api_url = "";
 let vote_url = "";
+let api_key = "";
 
 fetch("statics/json/config.json")
   .then(res => res.json())
   .then(config => {
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
+    api_key = config.API_KEY;
     loadData(api_url); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
@@ -274,7 +276,12 @@ async function votePlayer(playerName) {
     const response = await fetch(vote_url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: playerName })
+      // body: JSON.stringify({ name: playerName })
+        body: JSON.stringify({ 
+        name: playerName,
+        api_key: api_key // 例: リクエストボディに直接追加
+        // api_key: "api_key"
+      })
     });
     if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
     closeModal();
