@@ -43,6 +43,14 @@ async function loadRankingData() {
 function renderRanking(ranking) {
     const container = document.getElementById('rankingContainer');
     container.innerHTML = ''; // コンテナをクリア
+
+    // 投票データがない場合の処理
+    if (ranking.length === 0) {
+        container.innerHTML = "<p>投票データがありません。</p>";
+        container.classList.remove('hidden');
+        document.getElementById('loading').classList.add('hidden');
+        return; // これ以上処理しない
+    }
     
     let currentRank = 0;
     let prevVotes = -1;
