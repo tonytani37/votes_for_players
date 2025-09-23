@@ -248,6 +248,7 @@ function openModalPlayer(id) {
         <div class="muted">チーム: ${escapeHtml(p.team)}</div>
         <div class="muted">ポジション: ${p.position}</div>
         <div class="muted">生年月日:${p.grade}</div>
+        <div class="muted">出身地:${p.highSchoolClubActivities} / 出身校:${p.almaMater}</div>
       </div>
     </div>
   `;
