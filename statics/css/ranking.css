@@ -79,6 +79,14 @@
             flex-grow: 1;
         }
 
+        .rank-number {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--text-color);
+            margin-left: 1.5rem;
+        }
+
+
         .vote-count {
             font-size: 0.7rem;
             font-weight: bold;

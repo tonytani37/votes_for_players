@@ -265,12 +265,12 @@ function openModalPlayer(id) {
   const voteBtn = document.getElementById("voteBtn");
   if (voteBtn) {
     voteBtn.addEventListener("click", () => {
-      votePlayer(p.name);
+      votePlayer(p.name,p.number);
     });
   }
 }
 
-async function votePlayer(playerName) {
+async function votePlayer(playerName,playerNumber) {
   try {
      // 🔽 API呼び出し前にローディング表示
     document.getElementById('loading').classList.remove('hidden');
@@ -279,6 +279,7 @@ async function votePlayer(playerName) {
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify({ name: playerName })
         body: JSON.stringify({ 
+        number : playerNumber, 
         name: playerName,
         api_key: api_key // 例: リクエストボディに直接追加
         // api_key: "api_key"

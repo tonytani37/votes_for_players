@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(res => res.json())
         .then(config => {
             // APIのURLを、集計済みのランキングデータを返すエンドポイントに変更する
-            api_url = config.RANKING_API_URL;
+            ranking_url = config.RANKING_API_URL;
             loadRankingData();
         })
         .catch(err => {
@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadRankingData() {
     try {
         // 集計済みのランキングデータをAPIから直接取得する
-        const rankingRes = await fetch(api_url);
+        const rankingRes = await fetch(ranking_url);
         if (!rankingRes.ok) {
             throw new Error(`HTTP error! Status: ${rankingRes.status}`);
         }
@@ -67,6 +67,7 @@ function renderRanking(ranking) {
         item.innerHTML = `
             <div class="rank">${currentRank}位</div>
             <div class="rank-name">${escapeHtml(player.name)}</div>
+            <div class="rank-number">#${player.number}</div>
             <div class="vote-count">${player.votes}</div>
         `;
         container.appendChild(item);
