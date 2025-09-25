@@ -128,10 +128,11 @@ function filterItems() {
     items = items.filter(it => (it.division || '').toLowerCase() === state.division.toLowerCase());
   }
 
-  // 🔽 番号は部分一致
+  // 🔽 番号は完全一致
   if (state.numMax !== '' && state.numMax != null) {
     const target = String(state.numMax);
-    items = items.filter(it => String(it.number).includes(target));
+    // items = items.filter(it => String(it.number).includes(target));
+    items = items.filter(it => String(it.number)===(target));
   }
 
   if (q) {
