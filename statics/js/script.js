@@ -204,11 +204,14 @@ function renderPlayers(players) {
           <div class="team-badge">${escapeHtml(p.number)}</div>
           <div>
             <div style="font-weight:700">${escapeHtml(p.name)}</div>
-            <div class="meta">${escapeHtml(p.team)} ${p.position}</div>
-            <div class="meta">生年月日:${p.grade}</div>
+            <div class="muted">身長:${p.height}cm / 体重:${p.weight}kg</div>
           </div>
         </div>
       `;
+
+      // <div class="meta">${escapeHtml(p.team)} ${p.position}</div> チーム名や生年月日を表示する場合はこれを上に挿入する
+      // <div class="meta">生年月日:${p.grade}</div>
+
       c.addEventListener('click', () => openModalPlayer(p.id));
       c.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') openModalPlayer(p.id)
@@ -247,7 +250,6 @@ function openModalPlayer(id) {
         <button class="btn" id="modalClose">もどる</button>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
         <div class="">身長:${p.height}cm / 体重:${p.weight}kg</div>
-        <div class="muted">チーム: ${escapeHtml(p.team)}</div>
         <div class="muted">ポジション: ${p.position}</div>
         <div class="muted">生年月日:${p.grade}</div>
 
@@ -255,6 +257,9 @@ function openModalPlayer(id) {
       </div>
     </div>
   `;
+
+  // <div class="muted">チーム: ${escapeHtml(p.team)}</div> //チーム名が必要なときにはこれ選手詳細に挿入する
+  
   modalRoot.setAttribute('aria-hidden', 'false');
   const backdrop = modalRoot.querySelector('.modal-backdrop');
   const close = modalRoot.querySelector('#modalClose');
