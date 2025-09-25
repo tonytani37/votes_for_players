@@ -15,6 +15,23 @@ fetch("statics/json/config.json")
     console.error("config.json の読み込み失敗:", err);
   });
 
+function calcAge(birthStr) {
+  // "2025年1月1日" → "2025-01-01" に変換
+  const normalized = birthStr.replace("年", "-").replace("月", "-").replace("日", "");
+  const birthDate = new Date(normalized);
+
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  // 誕生日がまだ来ていなければ1歳引く
+  const thisYearBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+  if (today < thisYearBirthday) {
+    age--;
+  }
+
+  return age;
+}
+
 /* -------------------------
    Data
    ------------------------- */
@@ -204,7 +221,7 @@ function renderPlayers(players) {
           <div class="team-badge">${escapeHtml(p.number)}</div>
           <div>
             <div style="font-weight:700">${escapeHtml(p.name)}</div>
-            <div class="muted">身長:${p.height}cm / 体重:${p.weight}kg</div>
+            <div class="muted">${p.position}  ${p.height}cm / ${p.weight}kg</div>
           </div>
         </div>
       `;
@@ -233,8 +250,10 @@ function renderPlayers(players) {
 // （既存の openModalPlayer / votePlayer / showThankYouMessage / showErrorMessage / closeModal / escHandler / escapeHtml をそのまま利用）
 
 function openModalPlayer(id) {
+
   const p = samplePlayers.find(x => x.id === id);
   const playerImgSrc = `statics/img/players/${p.imgTemp}`;
+  const calc_age = calcAge(p.grade)
   if (!p) return;
   modalRoot.innerHTML = `
     <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="選手詳細">
@@ -249,9 +268,10 @@ function openModalPlayer(id) {
 
         <button class="btn" id="modalClose">もどる</button>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
-        <div class="">身長:${p.height}cm / 体重:${p.weight}kg</div>
+        <div class="">${p.height}cm / ${p.weight}kg</div>
         <div class="muted">ポジション: ${p.position}</div>
         <div class="muted">生年月日:${p.grade}</div>
+        <div class="muted">年齢:${calc_age}歳</div>
 
         <div class="muted">出身地:${p.highSchoolClubActivities} / 出身校:${p.almaMater}</div>
       </div>
