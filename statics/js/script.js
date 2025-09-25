@@ -246,9 +246,11 @@ function openModalPlayer(id) {
 
         <button class="btn" id="modalClose">もどる</button>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
+        <div class="">身長:${p.height}cm / 体重:${p.weight}kg</div>
         <div class="muted">チーム: ${escapeHtml(p.team)}</div>
         <div class="muted">ポジション: ${p.position}</div>
         <div class="muted">生年月日:${p.grade}</div>
+
         <div class="muted">出身地:${p.highSchoolClubActivities} / 出身校:${p.almaMater}</div>
       </div>
     </div>
