@@ -226,7 +226,8 @@ function renderPlayers(players) {
           <img src=${playerImgSrc} style="width:60px; height:100px; object-fit:cover; border-radius:8px;">
           <div>
             <div style="font-weight:700">${escapeHtml(p.name)}</div>
-            <div class="muted">${p.position}  ${p.height}cm / ${p.weight}kg</div>
+            <div class="muted">ポジション: ${p.position}</div>
+            <div class="muted">${p.height}cm / ${p.weight}kg</div>
           </div>
         </div>
       `;
