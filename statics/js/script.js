@@ -181,7 +181,7 @@ if (hasFilters) {
   if (filtered.length > 0) {
     summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
   } else {
-    summaryEl.innerHTML = `<h2><strong>検索対象選手が登録されていません</strong></h2>`;
+    summaryEl.innerHTML = `<h2>選手が登録されていません</h2>`;
   }
 } else {
   summaryEl.innerHTML = `選手を検索して投票してください`;
