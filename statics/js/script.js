@@ -223,7 +223,7 @@ function renderPlayers(players) {
     wrapper.appendChild(table);
   } else {
     players.forEach(p => {
-      const playerImgSrc = `statics/img/players/${p.imgTemp}`;
+      const playerImgSrc = `statics/img/players/${p.team}/${p.imgTemp}`;
       const c = document.createElement('article');
       c.className = 'card';
       c.tabIndex = 0;
