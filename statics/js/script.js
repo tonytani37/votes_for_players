@@ -2,6 +2,8 @@
 let api_url = "";
 let vote_url = "";
 let api_key = "";
+let home = "";
+let visitor = "";
 
 fetch("statics/json/config.json")
   .then(res => res.json())
@@ -9,7 +11,9 @@ fetch("statics/json/config.json")
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
     api_key = config.API_KEY;
-    loadData(api_url); // 初回ロード時にAPIを叩く
+    home = config.HOME_TEAM;
+    visitor = config.VISITOR_TEAM;
+    loadData(api_url,home,visitor); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
     console.error("config.json の読み込み失敗:", err);
@@ -36,7 +40,7 @@ function calcAge(birthStr) {
    Data
    ------------------------- */
 let samplePlayers = [];
-async function loadData(api_url) {
+async function loadData(api_url,home,visitor) {
   try {
     document.getElementById('loading').classList.remove('hidden');
 
@@ -47,8 +51,10 @@ async function loadData(api_url) {
       samplePlayers = JSON.parse(cachedData);
       // console.log('キャッシュされたデータを使用します。');
     } else {
+      const url = `${api_url}?home=${encodeURIComponent(home)}&visitor=${encodeURIComponent(visitor)}`;
       // キャッシュがなければAPIからデータを取得
-      const playersRes = await fetch(api_url);
+      // const playersRes = await fetch(api_url);
+      const playersRes = await fetch(url);
       samplePlayers = await playersRes.json();
       
       // 取得したデータをsessionStorageに保存
@@ -226,6 +232,7 @@ function renderPlayers(players) {
           <img src=${playerImgSrc} style="width:60px; height:100px; object-fit:cover; border-radius:8px;">
           <div>
             <div style="font-weight:700">${escapeHtml(p.name)}</div>
+            <div class="muted">${p.team}</div>
             <div class="muted">ポジション: ${p.position}</div>
             <div class="muted">${p.height}cm / ${p.weight}kg</div>
           </div>
@@ -275,6 +282,7 @@ function openModalPlayer(id) {
 
         <button class="btn" id="modalClose">もどる</button>
         <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
+        <div class="muted">${p.team}</div>
         <div class="">${p.height}cm / ${p.weight}kg</div>
         <div class="muted">ポジション: ${p.position}</div>
         <div class="muted">生年月日:${p.grade}</div>
@@ -300,12 +308,12 @@ function openModalPlayer(id) {
   const voteBtn = document.getElementById("voteBtn");
   if (voteBtn) {
     voteBtn.addEventListener("click", () => {
-      votePlayer(p.name,p.number);
+      votePlayer(p.name,p.number,p.team);
     });
   }
 }
 
-async function votePlayer(playerName,playerNumber) {
+async function votePlayer(playerName,playerNumber,playerTeam) {
   try {
      // 🔽 API呼び出し前にローディング表示
     document.getElementById('loading').classList.remove('hidden');
@@ -314,6 +322,7 @@ async function votePlayer(playerName,playerNumber) {
       headers: { 'Content-Type': 'application/json' },
       // body: JSON.stringify({ name: playerName })
         body: JSON.stringify({ 
+        team : playerTeam,
         number : playerNumber, 
         name: playerName,
         api_key: api_key // 例: リクエストボディに直接追加
