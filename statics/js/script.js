@@ -266,7 +266,7 @@ function renderPlayers(players) {
 function openModalPlayer(id) {
 
   const p = samplePlayers.find(x => x.id === id);
-  const playerImgSrc = `statics/img/players/${p.imgTemp}`;
+  const playerImgSrc = `statics/img/players/${p.team}/${p.imgTemp}`;
   const calc_age = calcAge(p.grade)
   if (!p) return;
   modalRoot.innerHTML = `
