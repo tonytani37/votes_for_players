@@ -3,6 +3,6 @@
   "VOTE_URL":"https://players-api-281456272382.us-central1.run.app/vote",
   "RANKING_API_URL":"https://players-api-281456272382.us-central1.run.app/ranking",
   "API_KEY":"wbIGTf3sOvp7NnXsSJfs",
-  "HOME_TEAM":"広島ドラゴンフライズ",
-  "VISITOR_TEAM":"レバンガ北海道"
+  "HOME_TEAM":["広島ドラゴンフライズ","HD"],
+  "VISITOR_TEAM":["レバンガ北海道","RH"]
 }

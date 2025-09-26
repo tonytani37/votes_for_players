@@ -11,8 +11,12 @@ fetch("statics/json/config.json")
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
     api_key = config.API_KEY;
-    home = config.HOME_TEAM;
-    visitor = config.VISITOR_TEAM;
+    const home_all = config.HOME_TEAM;
+    const visitor_all = config.VISITOR_TEAM;
+    const home = home_all[0];
+    const home_code = home_all[1];
+    const visitor = visitor_all[0];
+    const visitor_code = visitor_all[1];
     loadData(api_url,home,visitor); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
@@ -223,7 +227,8 @@ function renderPlayers(players) {
     wrapper.appendChild(table);
   } else {
     players.forEach(p => {
-      const playerImgSrc = `statics/img/players/${p.team}/${p.imgTemp}`;
+      const team_code = p.id.slice(0,2);
+      const playerImgSrc = `statics/img/players/${team_code}/${p.imgTemp}`;
       const c = document.createElement('article');
       c.className = 'card';
       c.tabIndex = 0;
@@ -264,9 +269,9 @@ function renderPlayers(players) {
 // （既存の openModalPlayer / votePlayer / showThankYouMessage / showErrorMessage / closeModal / escHandler / escapeHtml をそのまま利用）
 
 function openModalPlayer(id) {
-
   const p = samplePlayers.find(x => x.id === id);
-  const playerImgSrc = `statics/img/players/${p.team}/${p.imgTemp}`;
+  const team_code = p.id.slice(0,2);
+  const playerImgSrc = `statics/img/players/${team_code}/${p.imgTemp}`;
   const calc_age = calcAge(p.grade)
   if (!p) return;
   modalRoot.innerHTML = `
