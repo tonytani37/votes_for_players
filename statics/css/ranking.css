@@ -1,11 +1,11 @@
        :root {
-            --orange-primary: #FF7043;
+            --orange-primary: #ea470a;
             --orange-light: #FFAB91;
             --text-color: #333;
             --card-bg: #fff;
             --shadow-color: rgba(0, 0, 0, 0.1);
             --border-color: #ddd;
-            --header-bg: #FF5722;
+            --header-bg: #ea470a;
         }
 
         body {
