@@ -213,12 +213,13 @@ function renderPlayers(players) {
     wrapper.appendChild(table);
   } else {
     players.forEach(p => {
+      const playerImgSrc = `statics/img/players/${p.imgTemp}`;
       const c = document.createElement('article');
       c.className = 'card';
       c.tabIndex = 0;
       c.innerHTML = `
         <div style="display:flex;gap:12px;align-items:center">
-          <div class="team-badge">${escapeHtml(p.number)}</div>
+          <img src=${playerImgSrc} style="width:60px; height:100px; object-fit:cover; border-radius:8px;">
           <div>
             <div style="font-weight:700">${escapeHtml(p.name)}</div>
             <div class="muted">${p.position}  ${p.height}cm / ${p.weight}kg</div>
@@ -226,6 +227,7 @@ function renderPlayers(players) {
         </div>
       `;
 
+      // <div class="team-badge">${escapeHtml(p.number)}</div>
       // <div class="meta">${escapeHtml(p.team)} ${p.position}</div> チーム名や生年月日を表示する場合はこれを上に挿入する
       // <div class="meta">生年月日:${p.grade}</div>
 
