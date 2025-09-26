@@ -177,11 +177,15 @@ function render() {
   countEl.textContent = filtered.length;
 
   const hasFilters = state.q || state.division || state.numMax;
-  if (hasFilters) {
+if (hasFilters) {
+  if (filtered.length > 0) {
     summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
   } else {
-    summaryEl.innerHTML = `選手を検索して投票してください`;
+    summaryEl.innerHTML = `<h2><strong>検索対象選手が登録されていません</strong></h2>`;
   }
+} else {
+  summaryEl.innerHTML = `選手を検索して投票してください`;
+}
 
   updateActiveFilters();
   renderPlayers(filtered);
