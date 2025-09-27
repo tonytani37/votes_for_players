@@ -198,9 +198,18 @@ function render() {
     summaryEl.innerHTML = ''; // 要約エリアをクリア
     
     // 結果エリアに専用メッセージを表示
-    renderNoPlayersMessage(resultsArea); 
-    
-    updateActiveFiltersとrenderPlayersを実行せずに終了
+    renderNoPlayersMessage(resultsArea);
+    // updateActiveFiltersとrenderPlayersを実行せずに終了
+    // ★ 修正: 検索結果がゼロの場合もスクロール処理を実行してから終了
+    if (resultsArea && headerEl) {
+        setTimeout(() => {
+            window.scrollTo({
+                top: 5,
+                behavior: 'smooth'
+            });
+        }, 100);
+    }
+  // updateActiveFiltersとrenderPlayersを実行せずに終了
     return; 
   }
 
