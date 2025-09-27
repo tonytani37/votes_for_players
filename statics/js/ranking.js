@@ -1,5 +1,11 @@
 // config.jsonから設定を読み込み
 let api_url = "";
+let allRankingData = [];
+
+const TEAM_NAMES = {
+    'home': '広島ドラゴンフライズ',  // 例: 'ライオンズ'
+    'visitor': 'レバンガ北海道' // 例: 'ドラゴンズ'
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch("statics/json/config.json")
@@ -8,6 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // APIのURLを、集計済みのランキングデータを返すエンドポイントに変更する
             ranking_url = config.RANKING_API_URL;
             loadRankingData();
+            // ボタンのイベントリスナーを設定
+            setupFilterButtons(); 
         })
         .catch(err => {
             console.error("config.json の読み込み失敗:", err);
@@ -27,6 +35,13 @@ async function loadRankingData() {
             throw new Error(`HTTP error! Status: ${rankingRes.status}`);
         }
         const ranking = await rankingRes.json();
+
+        // 【変更】取得した全データをグローバル変数に保存
+        allRankingData = ranking;
+        // console.log(allRankingData)
+        
+        // 初期表示は「全体」のデータをレンダリング
+        filterAndRenderRanking('all');
         
         renderRanking(ranking);
     } catch (err) {
@@ -36,7 +51,60 @@ async function loadRankingData() {
         document.getElementById('rankingContainer').classList.remove('hidden');
     }
 }
+/* -------------------------
+   【新規】ランキングのフィルタリングとレンダリング
+   ------------------------- */
+/**
+ * @param {string} team_type - フィルタリングするチームタイプ ('all', 'home', 'visitor')
+ */
+function filterAndRenderRanking(team_type) {
+    let filteredRanking = [];
 
+    if (team_type === 'all') {
+        // 'all' の場合は全データを使用
+        filteredRanking = allRankingData;
+        // console.log("all");
+    } else {
+        // ボタンのID（'home' or 'visitor'）から、実際の日本語チーム名を取得
+        const targetTeamName = TEAM_NAMES[team_type];
+        // console.log(team_type);
+        console.log(allRankingData);
+        // 'home' または 'visitor' の場合はデータをフィルタリング
+        // プレイヤーオブジェクトの 'team' プロパティが targetTeamName と一致するものを抽出します
+        filteredRanking = allRankingData.filter(player => player.team === targetTeamName);
+    }
+
+    // フィルタリングされたデータでレンダリング関数を呼び出し
+    renderRanking(filteredRanking);
+}
+
+/* -------------------------
+   【新規】ボタンのイベントリスナー設定
+   ------------------------- */
+function setupFilterButtons() {
+    const showAllButton = document.getElementById('showAll');
+    const showHomeButton = document.getElementById('showHome');
+    const showVisitorButton = document.getElementById('showVisitor');
+    const buttons = [showAllButton, showHomeButton, showVisitorButton];
+
+    buttons.forEach(button => {
+        button.addEventListener('click', (event) => {
+            // 全てのボタンから 'active' クラスを削除して、クリックされたボタンに 'active' を付与
+            buttons.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            let teamType = 'all';
+            if (event.target.id === 'showHome') {
+                teamType = 'home';
+            } else if (event.target.id === 'showVisitor') {
+                teamType = 'visitor';
+            }
+            
+            // フィルタリングとレンダリングを実行
+            filterAndRenderRanking(teamType);
+        });
+    });
+}
 /* -------------------------
    レンダリング
    ------------------------- */
