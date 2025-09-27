@@ -121,7 +121,11 @@ function renderRanking(ranking) {
         document.getElementById('loading').classList.add('hidden');
         return; // これ以上処理しない
     }
-    
+    // 【新規】ビジターチームのチーム名を取得
+    const VISITOR_TEAM_NAME = TEAM_NAMES.visitor; 
+    // 【新規】ビジターチーム用の背景色を定義
+    const VISITOR_BG_COLOR = '#edededff'; // 少し暗い色 (例: 薄いグレー)
+
     let currentRank = 0;
     let prevVotes = -1;
     
@@ -134,6 +138,10 @@ function renderRanking(ranking) {
         
         const item = document.createElement('div');
         item.className = 'ranking-item';
+               // 【修正点】ビジターチームの場合にインラインスタイルを設定
+        if (player.team === VISITOR_TEAM_NAME) {
+            item.style.backgroundColor = VISITOR_BG_COLOR;
+        }
         item.innerHTML = `
             <div class="rank">${currentRank}位</div>
             <div class="rank-name">${escapeHtml(player.name)}</div>
