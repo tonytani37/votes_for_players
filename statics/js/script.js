@@ -190,17 +190,30 @@ function render() {
 
   const filtered = filterItems();
   countEl.textContent = filtered.length;
-
   const hasFilters = state.q || state.division || state.numMax;
+
+  /// 1. 選手データが全く登録されていない場合 (フィルタなし かつ 結果ゼロ)
+  // これが「選手が登録されていません」のメッセージを出すべき状態です。
+  if (hasFilters && filtered.length === 0) {
+    summaryEl.innerHTML = ''; // 要約エリアをクリア
+    
+    // 結果エリアに専用メッセージを表示
+    renderNoPlayersMessage(resultsArea); 
+    
+    updateActiveFiltersとrenderPlayersを実行せずに終了
+    return; 
+  }
+
+
 if (hasFilters) {
   if (filtered.length > 0) {
     summaryEl.innerHTML = `選手を表示中 — 全 <strong>${filtered.length}</strong> 件`;
   } else {
-    summaryEl.innerHTML = `<h2>選手が登録されていません</h2>`;
+    summaryEl.innerHTML = `選手が登録されていません`;
   }
-} else {
-  summaryEl.innerHTML = `選手を検索して投票してください`;
-}
+  } else {
+    summaryEl.innerHTML = `選手を検索して投票してください`;
+  }
 
   updateActiveFilters();
   renderPlayers(filtered);
@@ -214,6 +227,19 @@ if (hasFilters) {
           });
       }, 100);
   }
+}
+
+// ★ 新規追加: 選手が登録されていない場合の専用メッセージ表示関数
+function renderNoPlayersMessage(container) {
+    container.innerHTML = '';
+    const noPlayersMessage = document.createElement('div');
+    noPlayersMessage.className = 'no-players-message';
+    noPlayersMessage.style.textAlign = 'center';
+    noPlayersMessage.style.padding = '40px 20px';
+    noPlayersMessage.innerHTML = `
+        <strong>選手が登録されていません。</strong>
+    `;
+    container.appendChild(noPlayersMessage);
 }
 
 function updateActiveFilters() {
