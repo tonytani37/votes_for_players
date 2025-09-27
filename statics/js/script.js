@@ -200,8 +200,16 @@ if (hasFilters) {
   updateActiveFilters();
   renderPlayers(filtered);
 
-  // ★ 追加: フィルタリング結果表示後に画面トップへスクロール
-  window.scrollTo(0, 0);
+ // ★ 修正: スクロール処理をsetTimeoutでラップして遅延実行
+  if (resultsArea) {
+    // DOMの更新やキーボードの開閉処理が完了するのを待ってからスクロールを実行
+    setTimeout(() => {
+        resultsArea.scrollIntoView({
+            behavior: 'smooth', 
+            block: 'start'      
+        });
+    }, 100); // 100ミリ秒後に実行
+  }
 }
 
 function updateActiveFilters() {
