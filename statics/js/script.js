@@ -104,7 +104,7 @@ const resetBtn = document.getElementById('resetFilters');
 // ★ 新規追加: Header要素を取得
 const headerEl = document.querySelector('header'); 
 // 検索結果の開始位置として適切な要素も取得しておくと便利です
-const resultsSectionEl = document.querySelector('.search-section');
+// const resultsSectionEl = document.querySelector('.search-section');
 
 /* -------------------------
    Event Listeners
@@ -207,18 +207,9 @@ if (hasFilters) {
 
   // ★ 修正: Headerの高さを考慮して、検索結果が表示されるセクションまでスクロール
   if (resultsArea && headerEl) {
-      // Headerの高さを取得 (offsetWidth/Heightはpaddingやborderを含むため、正確な高さを取得できます)
-      const headerHeight = headerEl.offsetHeight;
-
-      // 検索結果エリア（resultsAreaの親要素である.search-sectionの直下）の上端位置を取得
-      // getBoundingClientRect().top はビューポートからの相対位置
-      // window.scrollY を足すことで、ドキュメントの最上部からの絶対位置がわかる
-      const targetElement = resultsSectionEl || resultsArea;
-      const targetTop = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight;
-
       setTimeout(() => {
           window.scrollTo({
-              top: targetTop,
+              top: 5,
               behavior: 'smooth'
           });
       }, 100);
