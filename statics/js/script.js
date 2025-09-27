@@ -199,6 +199,9 @@ if (hasFilters) {
 
   updateActiveFilters();
   renderPlayers(filtered);
+
+  // ★ 追加: フィルタリング結果表示後に画面トップへスクロール
+  window.scrollTo(0, 0);
 }
 
 function updateActiveFilters() {
