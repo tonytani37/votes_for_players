@@ -3,8 +3,8 @@ let api_url = "";
 let allRankingData = [];
 
 const TEAM_NAMES = {
-    'home': '広島ドラゴンフライズ',  // 例: 'ライオンズ'
-    'visitor': 'レバンガ北海道' // 例: 'ドラゴンズ'
+    'home': '',  // 例: 'ライオンズ'
+    'visitor': '' // 例: 'ドラゴンズ'
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(config => {
             // APIのURLを、集計済みのランキングデータを返すエンドポイントに変更する
             ranking_url = config.RANKING_API_URL;
+            TEAM_NAMES.home = config.HOME_TEAM[0];
+            TEAM_NAMES.visitor = config.VISITOR_TEAM[0];
             loadRankingData();
             // ボタンのイベントリスナーを設定
             setupFilterButtons(); 
