@@ -2,8 +2,8 @@
 let api_url = "";
 let vote_url = "";
 let api_key = "";
-let home = "";
-let visitor = "";
+// let home = "";
+// let visitor = "";
 
 fetch("statics/json/config.json")
   .then(res => res.json())
@@ -17,6 +17,8 @@ fetch("statics/json/config.json")
     const home_code = home_all[1];
     const visitor = visitor_all[0];
     const visitor_code = visitor_all[1];
+    const match_date = config.Match_DATE;
+    const arena = config.ARENA;
     loadData(api_url,home,visitor); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
