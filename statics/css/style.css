@@ -214,6 +214,22 @@ label{display:block; font-size:13px; color:var(--muted); margin-bottom:6px}
 }
 footer{margin-top:16px; color:var(--muted); font-size:13px}
 
+#matchInfoArea {
+    /* これが横並びを実現する主要な設定です */
+    display: flex;
+    
+    /* 要素間のスペースを空ける場合は、以下のどちらかを追加 */
+    gap: 20px; /* 要素間に一定の間隔を設ける */
+    /* または */
+    /* justify-content: space-around; /* 要素間に均等なスペースを設ける */
+}
+
+/* 必要に応じて、<p>要素にもスタイルを適用できます */
+#matchInfoArea p {
+    margin: 0; /* <p>タグのデフォルトの上下マージンをリセット */
+    white-space: nowrap; /* テキストが折り返されないようにする */
+}
+
   /* ローディング画面全体 */
   #loading {
     position: fixed;
