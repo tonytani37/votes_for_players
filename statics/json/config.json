@@ -3,8 +3,8 @@
   "VOTE_URL":"https://players-api-281456272382.us-central1.run.app/vote",
   "RANKING_API_URL":"https://players-api-281456272382.us-central1.run.app/ranking",
   "API_KEY":"wbIGTf3sOvp7NnXsSJfs",
-  "HOME_TEAM":["広島ドラゴンフライズ","HD"],
-  "VISITOR_TEAM":["レバンガ北海道","LH"],
-  "MATCH_DATE" : "2025年10月11日",
-  "ARENA" : "広島サンプラザホール"
+  "HOME_TEAM":["川崎ブレイブサンダース","KB"],
+  "VISITOR_TEAM":["広島ドラゴンフライズ","HD"],
+  "MATCH_DATE" : "2025年10月04日",
+  "ARENA" : "東急ドレッセとどろきアリーナ"
 }

@@ -21,12 +21,12 @@ fetch("statics/json/config.json")
     const arena = config.ARENA;
 
     // ★ 追記部分: Match DateとArenaをヘッダーに表示
-    if (matchDateDisplayEl) {
-        matchDateDisplayEl.textContent = `開催日: ${match_date}`;
-    }
-    if (arenaDisplayEl) {
-        arenaDisplayEl.textContent = `会場: ${arena}`;
-    }
+    // if (matchDateDisplayEl) {
+    matchDateDisplayEl.textContent = `開催日: ${match_date}　会場:  ${arena}`;
+    // }
+    // if (arenaDisplayEl) {
+    //     arenaDisplayEl.textContent = `会場: ${arena}`;
+    // }
 
     matchDisoplayEl.textContent = `HOME: ${home}　AWAY: ${visitor}`;
     // ★ 追記部分: ここまで
