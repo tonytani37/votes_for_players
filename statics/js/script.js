@@ -2,8 +2,16 @@
 let api_url = "";
 let vote_url = "";
 let api_key = "";
-// let home = "";
-// let visitor = "";
+let home = "";
+let home_all = "";
+let visitor = "";
+let visitor_all = "";
+let home_code = "";
+let visitor_code = "";
+let match_date = "";
+let arena = "";
+
+
 
 fetch("statics/json/config.json")
   .then(res => res.json())
@@ -11,14 +19,19 @@ fetch("statics/json/config.json")
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
     api_key = config.API_KEY;
-    const home_all = config.HOME_TEAM;
-    const visitor_all = config.VISITOR_TEAM;
-    const home = home_all[0];
-    const home_code = home_all[1];
-    const visitor = visitor_all[0];
-    const visitor_code = visitor_all[1];
-    const match_date = config.MATCH_DATE;
-    const arena = config.ARENA;
+    home_all = config.HOME_TEAM;
+    visitor_all = config.VISITOR_TEAM;
+    home = home_all[0];
+    home_code = home_all[1];
+    visitor = visitor_all[0];
+    visitor_code = visitor_all[1];
+    match_date = config.MATCH_DATE;
+    arena = config.ARENA;
+    // ★ 修正/追加: グローバル変数にチーム名とコードを格納
+    // const homeTeamName = home;
+    // homeTeamCode = home_code; // ここでコードをグローバルに保存
+    // const visitorTeamName = visitor;
+    // visitorTeamCode = visitor_code; // ここでコードをグローバルに保存
 
     // ★ 追記部分: Match DateとArenaをヘッダーに表示
     // if (matchDateDisplayEl) {
@@ -295,8 +308,15 @@ function renderPlayers(players) {
     wrapper.appendChild(table);
   } else {
     players.forEach(p => {
+      // ★ 修正: チーム名に応じてコードを切り替える
+      let teamCodeForHA = '';
+      if (p.team === home) {
+          teamCodeForHA = "H"; // HOMEチームならHOMEコードを使用
+      } else if (p.team === visitor) {
+          teamCodeForHA = "A"; // AWAYチームならAWAYコードを使用
+      }
       const team_code = p.id.slice(0,2);
-      const playerImgSrc = `statics/img/players/${team_code}/${p.imgTemp}`;
+      const playerImgSrc = `statics/img/players/${team_code}/${teamCodeForHA}/${p.imgTemp}`;
       const c = document.createElement('article');
       c.className = 'card';
       c.tabIndex = 0;
@@ -338,8 +358,15 @@ function renderPlayers(players) {
 
 function openModalPlayer(id) {
   const p = samplePlayers.find(x => x.id === id);
+  // ★ 修正: チーム名に応じてコードを切り替える
+  let teamCodeForHA = '';
+  if (p.team === home) {
+      teamCodeForHA = "H"; // HOMEチームならHOMEコードを使用
+  } else if (p.team === visitor) {
+      teamCodeForHA = "A"; // AWAYチームならAWAYコードを使用
+  }
   const team_code = p.id.slice(0,2);
-  const playerImgSrc = `statics/img/players/${team_code}/${p.imgTemp}`;
+  const playerImgSrc = `statics/img/players/${team_code}/${teamCodeForHA}/${p.imgTemp}`;
   const calc_age = calcAge(p.grade)
   if (!p) return;
   modalRoot.innerHTML = `
