@@ -6,6 +6,7 @@ const TEAM_NAMES = {
     'home': '',  // 例: 'ライオンズ'
     'visitor': '' // 例: 'ドラゴンズ'
 };
+const matchDisoplayEl = document.getElementById('matchDisplay');
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch("statics/json/config.json")
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ranking_url = config.RANKING_API_URL;
             TEAM_NAMES.home = config.HOME_TEAM[0];
             TEAM_NAMES.visitor = config.VISITOR_TEAM[0];
+            matchDisoplayEl.textContent = `HOME: ${TEAM_NAMES.home}　AWAY: ${TEAM_NAMES.visitor}`;
             loadRankingData();
             // ボタンのイベントリスナーを設定
             setupFilterButtons(); 
@@ -126,6 +128,7 @@ function renderRanking(ranking) {
     // 【新規】ビジターチーム用の背景色を定義
     const VISITOR_BG_COLOR = '#edededff'; // 少し暗い色 (例: 薄いグレー)
 
+
     let currentRank = 0;
     let prevVotes = -1;
     
@@ -138,7 +141,7 @@ function renderRanking(ranking) {
         
         const item = document.createElement('div');
         item.className = 'ranking-item';
-               // 【修正点】ビジターチームの場合にインラインスタイルを設定
+        // 【修正点】ビジターチームの場合にインラインスタイルを設定
         if (player.team === VISITOR_TEAM_NAME) {
             item.style.backgroundColor = VISITOR_BG_COLOR;
         }
