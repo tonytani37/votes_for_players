@@ -17,8 +17,20 @@ fetch("statics/json/config.json")
     const home_code = home_all[1];
     const visitor = visitor_all[0];
     const visitor_code = visitor_all[1];
-    const match_date = config.Match_DATE;
+    const match_date = config.MATCH_DATE;
     const arena = config.ARENA;
+
+    // ★ 追記部分: Match DateとArenaをヘッダーに表示
+    if (matchDateDisplayEl) {
+        matchDateDisplayEl.textContent = `開催日: ${match_date}`;
+    }
+    if (arenaDisplayEl) {
+        arenaDisplayEl.textContent = `会場: ${arena}`;
+    }
+
+    matchDisoplayEl.textContent = `HOME: ${home}　AWAY: ${visitor}`;
+    // ★ 追記部分: ここまで
+
     loadData(api_url,home,visitor); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
@@ -105,6 +117,10 @@ const resetBtn = document.getElementById('resetFilters');
 
 // ★ 新規追加: Header要素を取得
 const headerEl = document.querySelector('header'); 
+// ★ 新規追加: Match DateとArenaの表示要素を取得
+const matchDateDisplayEl = document.getElementById('matchDateDisplay'); // 追加
+const arenaDisplayEl = document.getElementById('arenaDisplay');       // 追加
+const matchDisoplayEl = document.getElementById('matchDisplay');
 // 検索結果の開始位置として適切な要素も取得しておくと便利です
 // const resultsSectionEl = document.querySelector('.search-section');
 

@@ -221,13 +221,15 @@ footer{margin-top:16px; color:var(--muted); font-size:13px}
     /* 要素間のスペースを空ける場合は、以下のどちらかを追加 */
     gap: 20px; /* 要素間に一定の間隔を設ける */
     /* または */
-    /* justify-content: space-around; /* 要素間に均等なスペースを設ける */
+    /* justify-content: space-around; 要素間に均等なスペースを設ける */
 }
 
 /* 必要に応じて、<p>要素にもスタイルを適用できます */
 #matchInfoArea p {
     margin: 0; /* <p>タグのデフォルトの上下マージンをリセット */
     white-space: nowrap; /* テキストが折り返されないようにする */
+    font-size :0.8em;
+    font-weight:600;
 }
 
   /* ローディング画面全体 */
