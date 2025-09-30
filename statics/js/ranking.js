@@ -7,6 +7,7 @@ const TEAM_NAMES = {
     'visitor': '' // 例: 'ドラゴンズ'
 };
 const matchDisoplayEl = document.getElementById('matchDisplay');
+const modalRoot = document.getElementById('modalRoot');
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch("statics/json/config.json")
@@ -27,6 +28,23 @@ document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('rankingContainer').innerHTML = "<p>設定ファイルの読み込みに失敗しました。</p>";
         });
 });
+
+function calcAge(birthStr) {
+  // "2025年1月1日" → "2025-01-01" に変換
+  const normalized = birthStr.replace("年", "-").replace("月", "-").replace("日", "");
+  const birthDate = new Date(normalized);
+
+  const today = new Date();
+  let age = today.getFullYear() - birthDate.getFullYear();
+
+  // 誕生日がまだ来ていなければ1歳引く
+  const thisYearBirthday = new Date(today.getFullYear(), birthDate.getMonth(), birthDate.getDate());
+  if (today < thisYearBirthday) {
+    age--;
+  }
+
+  return age;
+}
 
 /* -------------------------
    ランキングデータ取得
@@ -72,7 +90,7 @@ function filterAndRenderRanking(team_type) {
         // ボタンのID（'home' or 'visitor'）から、実際の日本語チーム名を取得
         const targetTeamName = TEAM_NAMES[team_type];
         // console.log(team_type);
-        console.log(allRankingData);
+        // console.log(allRankingData);
         // 'home' または 'visitor' の場合はデータをフィルタリング
         // プレイヤーオブジェクトの 'team' プロパティが targetTeamName と一致するものを抽出します
         filteredRanking = allRankingData.filter(player => player.team === targetTeamName);
@@ -151,11 +169,76 @@ function renderRanking(ranking) {
             <div class="rank-number">#${player.number}</div>
             <div class="vote-count">${player.votes}</div>
         `;
+        item.addEventListener('click', () => openModalPlayer(player.id,ranking));
+        item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') openModalPlayer(player.id,ranking)
+        });
         container.appendChild(item);
     });
     
     document.getElementById('loading').classList.add('hidden');
     container.classList.remove('hidden');
+}
+
+function openModalPlayer(id,ranking) {
+  const p = ranking.find(x => x.id === id);
+  // ★ 修正: チーム名に応じてコードを切り替える
+  let teamCodeForHA = '';
+  if (p.team === TEAM_NAMES.home) {
+      teamCodeForHA = "H"; // HOMEチームならHOMEコードを使用
+  } else if (p.team === TEAM_NAMES.visitor) {
+      teamCodeForHA = "A"; // AWAYチームならAWAYコードを使用
+  }
+  const team_code = p.id.slice(0,2);
+  const playerImgSrc = `statics/img/players/${team_code}/${teamCodeForHA}/${p.imgTemp}`;
+  const calc_age = calcAge(p.grade)
+  if (!p) return;
+  modalRoot.innerHTML = `
+    <div class="modal-backdrop" role="dialog" aria-modal="true" aria-label="選手詳細">
+      <div class="modal">
+        <div style="display:flex; align-items:flex-start; gap: 24px;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+                <img src=${playerImgSrc} style="width:120px; height:200px; object-fit:cover; border-radius:8px;">
+            </div>
+        <div>
+
+        <button class="btn" id="modalClose">もどる</button>
+        <h2>${escapeHtml(p.name)} #${p.number} <span class="muted">${p.captain}</span></h2>
+        <div class="muted">${p.team}</div>
+        <div class="">${p.height}cm / ${p.weight}kg</div>
+        <div class="muted">ポジション: ${p.position}</div>
+        <div class="muted">生年月日:${p.grade}</div>
+        <div class="muted">年齢:${calc_age}歳</div>
+
+        <div class="muted">出身地:${p.highSchoolClubActivities} / 出身校:${p.almaMater}</div>
+      </div>
+    </div>
+  `;
+
+  // <div class="muted">チーム: ${escapeHtml(p.team)}</div> //チーム名が必要なときにはこれ選手詳細に挿入する
+  
+  modalRoot.setAttribute('aria-hidden', 'false');
+  const backdrop = modalRoot.querySelector('.modal-backdrop');
+  const close = modalRoot.querySelector('#modalClose');
+  close.focus();
+  close.addEventListener('click', closeModal);
+  backdrop.addEventListener('click', (e) => {
+    if (e.target === backdrop) closeModal();
+  });
+//   window.addEventListener('keydown', escHandler);
+
+  const voteBtn = document.getElementById("voteBtn");
+  if (voteBtn) {
+    voteBtn.addEventListener("click", () => {
+      votePlayer(p.name,p.number,p.team);
+    });
+  }
+}
+
+function closeModal() {
+  modalRoot.innerHTML = '';
+  modalRoot.setAttribute('aria-hidden', 'true');
+//   window.removeEventListener('keydown', escHandler);
 }
 
 /* -------------------------
