@@ -25,7 +25,6 @@
             top: 0;
             left: 0;
             width: 100%;
-            /* z-index: 1000; */
             box-shadow: 0 2px 4px var(--shadow-color);
         }
 
@@ -111,6 +110,23 @@
             max-width: 300px;
             margin: 0 auto;
         }
+        #matchInfoArea {
+            /* これが横並びを実現する主要な設定です */
+            display: flex;
+            /* 要素間のスペースを空ける場合は、以下のどちらかを追加 */
+            /* gap: 20px; 要素間に一定の間隔を設ける */
+            /* または */
+            justify-content: space-around; /* 要素間に均等なスペースを設ける */
+        }
+
+        /* 必要に応じて、<p>要素にもスタイルを適用できます */
+        #matchInfoArea p {
+            margin: 0; /* <p>タグのデフォルトの上下マージンをリセット */
+            white-space: nowrap; /* テキストが折り返されないようにする */
+            font-size :0.6em;
+            font-weight:600;
+        }
+
         /* ローディング画面全体 */
         #loading {
           position: fixed;
