@@ -408,12 +408,12 @@ function openModalPlayer(id) {
   const voteBtn = document.getElementById("voteBtn");
   if (voteBtn) {
     voteBtn.addEventListener("click", () => {
-      votePlayer(p.name,p.number,p.team);
+      votePlayer(p.name,p.number,p.team,match_date);
     });
   }
 }
 
-async function votePlayer(playerName,playerNumber,playerTeam) {
+async function votePlayer(playerName,playerNumber,playerTeam,match_date) {
   try {
      // 🔽 API呼び出し前にローディング表示
     document.getElementById('loading').classList.remove('hidden');
@@ -425,6 +425,7 @@ async function votePlayer(playerName,playerNumber,playerTeam) {
         team : playerTeam,
         number : playerNumber, 
         name: playerName,
+        match_date: match_date,
         api_key: api_key // 例: リクエストボディに直接追加
         // api_key: "api_key"
       })

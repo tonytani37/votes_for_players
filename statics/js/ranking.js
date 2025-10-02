@@ -1,6 +1,7 @@
 // config.jsonから設定を読み込み
 let api_url = "";
 let allRankingData = [];
+let match_date = "";
 
 const TEAM_NAMES = {
     'home': '',  // 例: 'ライオンズ'
@@ -15,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(config => {
             // APIのURLを、集計済みのランキングデータを返すエンドポイントに変更する
             ranking_url = config.RANKING_API_URL;
+            match_date = config.MATCH_DATE;
             TEAM_NAMES.home = config.HOME_TEAM[0];
             TEAM_NAMES.visitor = config.VISITOR_TEAM[0];
             matchDisoplayEl.textContent = `HOME: ${TEAM_NAMES.home}　AWAY: ${TEAM_NAMES.visitor}`;
@@ -52,7 +54,8 @@ function calcAge(birthStr) {
 async function loadRankingData() {
     try {
         // 集計済みのランキングデータをAPIから直接取得する
-        const rankingRes = await fetch(ranking_url);
+        // const rankingRes = await fetch(ranking_url);
+        const rankingRes = await fetch(`${ranking_url}?match_date=${match_date}`);
         if (!rankingRes.ok) {
             throw new Error(`HTTP error! Status: ${rankingRes.status}`);
         }
