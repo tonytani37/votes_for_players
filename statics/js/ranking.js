@@ -2,12 +2,14 @@
 let api_url = "";
 let allRankingData = [];
 let match_date = "";
+let arena = "";
 
 const TEAM_NAMES = {
     'home': '',  // 例: 'ライオンズ'
     'visitor': '' // 例: 'ドラゴンズ'
 };
 const matchDisoplayEl = document.getElementById('matchDisplay');
+const arenaDisplayEl = document.getElementById('arenaDisplay');
 const modalRoot = document.getElementById('modalRoot');
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -17,9 +19,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // APIのURLを、集計済みのランキングデータを返すエンドポイントに変更する
             ranking_url = config.RANKING_API_URL;
             match_date = config.MATCH_DATE;
+            arena = config.ARENA;
             TEAM_NAMES.home = config.HOME_TEAM[0];
             TEAM_NAMES.visitor = config.VISITOR_TEAM[0];
             matchDisoplayEl.textContent = `HOME: ${TEAM_NAMES.home}　AWAY: ${TEAM_NAMES.visitor}`;
+            arenaDisplayEl.textContent = `開催日: ${match_date} 会場: ${arena}`;
             loadRankingData();
             // ボタンのイベントリスナーを設定
             setupFilterButtons(); 
