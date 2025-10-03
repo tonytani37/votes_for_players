@@ -51,8 +51,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 visitor = todaysEvent.visitor.team_name; // 例: "チームB"
                 home_code = todaysEvent.home.team_cd;
                 visitor_code = todaysEvent.visitor.team_cd; 
-                // home_code = todaysEvent.home.team_cd; 
-                // visitor_code = todaysEvent.visitor.team_cd;
+                TEAM_NAMES["home"] = todaysEvent.home.team_name;
+                TEAM_NAMES["visitor"] = todaysEvent.visitor.team_name; 
             } else {
                 console.log(`日付 ${gameDate} のイベントは見つかりませんでした。`);
             }
