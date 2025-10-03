@@ -16,6 +16,7 @@ let arena = "";
 fetch("statics/json/config.json")
   .then(res => res.json())
   .then(config => {
+
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
     api_key = config.API_KEY;
@@ -27,23 +28,11 @@ fetch("statics/json/config.json")
     visitor_code = visitor_all[1];
     match_date = config.MATCH_DATE;
     arena = config.ARENA;
-    // ★ 修正/追加: グローバル変数にチーム名とコードを格納
-    // const homeTeamName = home;
-    // homeTeamCode = home_code; // ここでコードをグローバルに保存
-    // const visitorTeamName = visitor;
-    // visitorTeamCode = visitor_code; // ここでコードをグローバルに保存
-
-    // ★ 追記部分: Match DateとArenaをヘッダーに表示
-    // if (matchDateDisplayEl) {
+    
     matchDateDisplayEl.textContent = `開催日: ${match_date}　会場:  ${arena}`;
-    // }
-    // if (arenaDisplayEl) {
-    //     arenaDisplayEl.textContent = `会場: ${arena}`;
-    // }
-
+    
     matchDisoplayEl.textContent = `HOME: ${home}　AWAY: ${visitor}`;
-    // ★ 追記部分: ここまで
-
+    
     loadData(api_url,home,visitor); // 初回ロード時にAPIを叩く
   })
   .catch(err => {
