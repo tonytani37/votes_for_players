@@ -11,23 +11,50 @@ let visitor_code = "";
 let match_date = "";
 let arena = "";
 
+const today = new Date();
+
+function formatToJapaneseDate(date) {
+    // 年を取得
+    const year = date.getFullYear();
+    
+    // 月を取得 (0-11なので +1 し、2桁になるよう先頭に '0' をパディング)
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    
+    // 日を取得 (2桁になるよう先頭に '0' をパディング)
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}年${month}月${day}日`;
+}
 
 
 fetch("statics/json/config.json")
   .then(res => res.json())
   .then(config => {
-
     api_url = config.API_URL;
     vote_url = config.VOTE_URL;
     api_key = config.API_KEY;
-    home_all = config.HOME_TEAM;
-    visitor_all = config.VISITOR_TEAM;
-    home = home_all[0];
-    home_code = home_all[1];
-    visitor = visitor_all[0];
-    visitor_code = visitor_all[1];
-    match_date = config.MATCH_DATE;
-    arena = config.ARENA;
+
+  　const gameDate = formatToJapaneseDate(today);
+  // const gameDate ="2025年10月11日"; // ←テスト用に固定
+
+   // 2. configオブジェクト内のEVENTS配列に対して find() を実行
+    const todaysEvent = config.GAME_DATA.find(item => {
+        // item.date と gameDate を比較
+        return item.match_date === gameDate; 
+    });
+
+    // // --- 3. 検索結果から値を取得 ---
+    if (todaysEvent) {
+      // console.log(`本日のイベントが見つかりました:`, todaysEvent);
+        match_date = todaysEvent.match_date;   // 例: "2025年10月04日"
+        arena = todaysEvent.arena;       // 例: "体育館"
+        home = todaysEvent.home.team_name;     // 例: "チームA"
+        visitor = todaysEvent.visitor.team_name; // 例: "チームB"
+        home_code = todaysEvent.home.team_cd; 
+        visitor_code = todaysEvent.visitor.team_cd;
+    } else {
+        console.log(`日付 ${gameDate} のイベントは見つかりませんでした。`);
+    }
     
     matchDateDisplayEl.textContent = `開催日: ${match_date}　会場:  ${arena}`;
     

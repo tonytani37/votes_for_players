@@ -3,8 +3,12 @@
   "VOTE_URL":"https://players-api-281456272382.us-central1.run.app/vote",
   "RANKING_API_URL":"https://players-api-281456272382.us-central1.run.app/ranking",
   "API_KEY":"wbIGTf3sOvp7NnXsSJfs",
+  "HOME_TEAM":["川崎ブレイブサンダース","KB"],
+  "VISITOR_TEAM":["広島ドラゴンフライズ","HD"],
+  "MATCH_DATE" : "2025年10月04日",
+  "ARENA" : "東急ドレッセとどろきアリーナ",
   "GAME_DATA":[
-    {"match_date":"2025年10月03日","arena":"テストアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
+    {"match_date":"2025年10月03日","arena":"東京ドーム","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
     {"match_date":"2025年10月04日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
     {"match_date":"2025年10月05日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
     {"match_date":"2025年10月11日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"レバンガ北海道","team_cd":"LH"}},

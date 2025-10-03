@@ -1,6 +1,8 @@
 // config.jsonから設定を読み込み
 let api_url = "";
 let allRankingData = [];
+let home = "";
+let visitor = "";
 let match_date = "";
 let arena = "";
 
@@ -11,6 +13,20 @@ const TEAM_NAMES = {
 const matchDisoplayEl = document.getElementById('matchDisplay');
 const arenaDisplayEl = document.getElementById('arenaDisplay');
 const modalRoot = document.getElementById('modalRoot');
+const today = new Date();
+
+function formatToJapaneseDate(date) {
+    // 年を取得
+    const year = date.getFullYear();
+    
+    // 月を取得 (0-11なので +1 し、2桁になるよう先頭に '0' をパディング)
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    
+    // 日を取得 (2桁になるよう先頭に '0' をパディング)
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    return `${year}年${month}月${day}日`;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     fetch("statics/json/config.json")
@@ -18,11 +34,28 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(config => {
             // APIのURLを、集計済みのランキングデータを返すエンドポイントに変更する
             ranking_url = config.RANKING_API_URL;
-            match_date = config.MATCH_DATE;
-            arena = config.ARENA;
-            TEAM_NAMES.home = config.HOME_TEAM[0];
-            TEAM_NAMES.visitor = config.VISITOR_TEAM[0];
-            matchDisoplayEl.textContent = `HOME: ${TEAM_NAMES.home}　AWAY: ${TEAM_NAMES.visitor}`;
+            const gameDate = formatToJapaneseDate(today);
+
+        // 2. configオブジェクト内のEVENTS配列に対して find() を実行
+            const todaysEvent = config.GAME_DATA.find(item => {
+                // item.date と gameDate を比較
+                return item.match_date === gameDate; 
+            });
+
+             // // --- 3. 検索結果から値を取得 ---
+            if (todaysEvent) {
+            // console.log(`本日のイベントが見つかりました:`, todaysEvent);
+                match_date = todaysEvent.match_date;   // 例: "2025年10月04日"
+                arena = todaysEvent.arena;       // 例: "体育館"
+                home = todaysEvent.home.team_name;     // 例: "チームA"
+                visitor = todaysEvent.visitor.team_name; // 例: "チームB"
+                // home_code = todaysEvent.home.team_cd; 
+                // visitor_code = todaysEvent.visitor.team_cd;
+            } else {
+                console.log(`日付 ${gameDate} のイベントは見つかりませんでした。`);
+            }
+
+            matchDisoplayEl.textContent = `HOME: ${home}　AWAY: ${visitor}`;
             arenaDisplayEl.textContent = `開催日: ${match_date} 会場: ${arena}`;
             loadRankingData();
             // ボタンのイベントリスナーを設定
