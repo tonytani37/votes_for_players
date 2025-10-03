@@ -49,6 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 arena = todaysEvent.arena;       // 例: "体育館"
                 home = todaysEvent.home.team_name;     // 例: "チームA"
                 visitor = todaysEvent.visitor.team_name; // 例: "チームB"
+                home_code = todaysEvent.home.team_cd;
+                visitor_code = todaysEvent.visitor.team_cd; 
                 // home_code = todaysEvent.home.team_cd; 
                 // visitor_code = todaysEvent.visitor.team_cd;
             } else {
@@ -182,7 +184,7 @@ function renderRanking(ranking) {
         return; // これ以上処理しない
     }
     // 【新規】ビジターチームのチーム名を取得
-    const VISITOR_TEAM_NAME = TEAM_NAMES.visitor; 
+    const VISITOR_TEAM_NAME = visitor; 
     // 【新規】ビジターチーム用の背景色を定義
     const VISITOR_BG_COLOR = '#edededff'; // 少し暗い色 (例: 薄いグレー)
 
@@ -224,9 +226,9 @@ function openModalPlayer(id,ranking) {
   const p = ranking.find(x => x.id === id);
   // ★ 修正: チーム名に応じてコードを切り替える
   let teamCodeForHA = '';
-  if (p.team === TEAM_NAMES.home) {
+  if (p.team === home) {
       teamCodeForHA = "H"; // HOMEチームならHOMEコードを使用
-  } else if (p.team === TEAM_NAMES.visitor) {
+  } else if (p.team === visitor) {
       teamCodeForHA = "A"; // AWAYチームならAWAYコードを使用
   }
   const team_code = p.id.slice(0,2);
