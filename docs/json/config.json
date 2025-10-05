@@ -5,8 +5,6 @@
   "API_KEY":"wbIGTf3sOvp7NnXsSJfs",
   "GAME_DATA":[
     {"match_date":"2025年10月04日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
-    {"match_date":"2025年10月05日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
-    {"match_date":"2025年10月11日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"レバンガ北海道","team_cd":"LH"}},
-    {"match_date":"2025年10月12日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"レバンガ北海道","team_cd":"LH"}}
+    {"match_date":"2025年10月05日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}}
     ]
   }

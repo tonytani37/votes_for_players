@@ -14,7 +14,7 @@
 <header>
     <div class="header-content">
         <div></div> <!-- left spacer -->
-        <img src="img/voting_leaderborad.png" alt="logo" height="60" style="vertical-align:middle; margin-right:12px">
+        <img src="img/voting_past_records.png" alt="logo" height="60" style="vertical-align:middle; margin-right:12px">
         <!-- <h1>Voting Leaderboard　</h1> -->
         <!-- <a class="btn small" href="./index.html">VOTE</a> -->
         <!-- <a class="btn small" href="index.html" style="background-color: #FF7043;">投票ページへ</a> -->
@@ -26,6 +26,10 @@
   <p>データを集計しています...</p>
 </div>
     <div class="main-content">
+        <div class="date-select-area" style="text-align: center; margin-bottom: 20px;">
+            <label for="dateSelect">開催日を選択して下さい </label>
+            <select id="dateSelect" class="btn" style="padding: 10px;"></select>
+        </div>
         <div id="matchInfoArea">
             <p id="matchDisplay"></p>
         </div>
@@ -34,10 +38,7 @@
         </div>
         <br>
         
-        <div class="date-select-area" style="text-align: center; margin-bottom: 20px;">
-            <label for="dateSelect">開催日を選択: </label>
-            <select id="dateSelect" class="btn" style="padding: 10px;"></select>
-        </div>
+ 
         <div class="team-filter" style="text-align: center; ">
             <button id="showHome" class="btn" style="margin: 0 5px;">H O M E</button>
             <button id="showAll" class="btn active" style="margin: 0 5px;">A L L</button>
