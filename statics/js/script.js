@@ -34,7 +34,7 @@ fetch("statics/json/config.json")
     vote_url = config.VOTE_URL;
     api_key = config.API_KEY;
 
-  　const gameDate = formatToJapaneseDate(today);
+  const gameDate = formatToJapaneseDate(today);
   // const gameDate ="2025年10月11日"; // ←テスト用に固定
 
    // 2. configオブジェクト内のEVENTS配列に対して find() を実行
