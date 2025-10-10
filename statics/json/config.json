@@ -8,6 +8,12 @@
     {"match_date":"2025年10月04日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
     {"match_date":"2025年10月05日","arena":"東急ドレッセとどろきアリーナ","home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
     {"match_date":"2025年10月11日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"レバンガ北海道","team_cd":"LH"}},
-    {"match_date":"2025年10月12日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"レバンガ北海道","team_cd":"LH"}}
-    ]
+    {"match_date":"2025年10月12日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"レバンガ北海道","team_cd":"LH"}},
+    {"match_date":"2025年10月15日","arena":"かたおかアリーナ京都","home":{"team_name":"京都ハンナリーズ","team_cd":"KH"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
+    {"match_date":"2025年10月18日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"佐賀バルーナーズ","team_cd":"SB"}},
+    {"match_date":"2025年10月19日","arena":"広島サンプラザホール","home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"visitor":{"team_name":"佐賀バルーナーズ","team_cd":"SB"}},
+    {"match_date":"2025年10月25日","arena":"おおきにアリーナ舞洲","home":{"team_name":"大阪エヴェッサ","team_cd":"OE"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
+    {"match_date":"2025年10月26日","arena":"おおきにアリーナ舞洲","home":{"team_name":"大阪エヴェッサ","team_cd":"OE"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}},
+    {"match_date":"2025年10月29日","arena":"横浜国際プール","home":{"team_name":"横浜ビー・コルセアーズ","team_cd":"YC"},"visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"}}
+  ]
   }
