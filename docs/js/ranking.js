@@ -10,6 +10,8 @@ let selected_match_date = ""; // 選択中の日付
 let arena = "";
 let home_code = "";
 let visitor_code = "";
+let home_score = "";
+let visitor_score = "";
 
 const TEAM_NAMES = {
     'home': '',
@@ -18,6 +20,7 @@ const TEAM_NAMES = {
 
 const matchDisoplayEl = document.getElementById('matchDisplay');
 const arenaDisplayEl = document.getElementById('arenaDisplay');
+const scoreDisplayEL = document.getElementById('scoreDisplay');
 const modalRoot = document.getElementById('modalRoot');
 const loadingEl = document.getElementById('loading');
 const rankingContainerEl = document.getElementById('rankingContainer');
@@ -174,12 +177,15 @@ function updateMatchInfoAndRanking(newDate, isInitialLoad = false) {
         visitor = selectedEvent.visitor.team_name;
         home_code = selectedEvent.home.team_cd;
         visitor_code = selectedEvent.visitor.team_cd;
+        home_score = selectedEvent.home.score;
+        visitor_score = selectedEvent.visitor.score;
         
         TEAM_NAMES["home"] = home;
         TEAM_NAMES["visitor"] = visitor; 
         
         matchDisoplayEl.textContent = `HOME: ${home}　AWAY: ${visitor}`;
         arenaDisplayEl.textContent = `開催日: ${newDate} 会場: ${arena}`;
+        scoreDisplayEL.textContent = `得点 ${home}: ${home_score} ${visitor}: ${visitor_score}`;
 
         // ランキングデータを再取得
         loadRankingData();
