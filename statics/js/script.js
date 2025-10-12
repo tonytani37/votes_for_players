@@ -217,7 +217,7 @@ function filterItems() {
   if (q) {
     const tokens = q.split(/\s+/);
     items = items.filter(it => {
-      const hay = `${it.name || ''} ${it.name_en || ''}`.toLowerCase();
+      const hay = `${it.name || ''} ${it.kana_name || ''}`.toLowerCase();
       return tokens.every(t => hay.includes(t));
     });
   }
