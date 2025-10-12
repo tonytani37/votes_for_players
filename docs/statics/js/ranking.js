@@ -86,7 +86,7 @@ function escapeHtml(s) {
 // 初期ロード処理
 // ===============================================
 document.addEventListener('DOMContentLoaded', () => {
-    fetch("json/config.json")
+    fetch("statics/json/config.json")
         .then(res => res.json())
         .then(async config => { // ★ ここを async に変更
             ranking_url = config.RANKING_API_URL;
@@ -185,7 +185,7 @@ async function updateMatchInfoAndRanking(newDate, isInitialLoad = false) { // �
         
         matchDisoplayEl.textContent = `HOME: ${home}　AWAY: ${visitor}`;
         arenaDisplayEl.textContent = `開催日: ${newDate} 会場: ${arena}`;
-        scoreDisplayEL.textContent = `得点 ${home}: ${home_score} ${visitor}: ${visitor_score}`;
+        scoreDisplayEL.textContent = `${home} ${home_score}  -  ${visitor_score} ${visitor}`;
 
         // ランキングデータを再取得（完了を待つ）
         await loadRankingData(); // ★ await を追加
