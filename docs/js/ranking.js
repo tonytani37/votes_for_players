@@ -88,7 +88,7 @@ function escapeHtml(s) {
 document.addEventListener('DOMContentLoaded', () => {
     fetch("json/config.json")
         .then(res => res.json())
-        .then(config => {
+        .then(async config => { // ★ ここを async に変更
             ranking_url = config.RANKING_API_URL;
             allGameData = config.GAME_DATA; 
             
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // 2. 初期選択された日付に基づいてUIを構築
             if (selected_match_date) {
-                updateMatchInfoAndRanking(selected_match_date, true); // 初期ロードフラグを立てて実行
+                await updateMatchInfoAndRanking(selected_match_date, true); // ★ await を追加
             } else {
                 // 日付データがない場合の処理
                 loadingEl.classList.add('hidden');
@@ -147,11 +147,11 @@ function setupDateSelect(gameData) {
     dateSelectEl.value = initialDate;
 
     // 選択肢変更時のイベントリスナーを設定
-    dateSelectEl.addEventListener('change', (event) => {
+    dateSelectEl.addEventListener('change', async (event) => { // ★ ここを async に変更
         // グローバル変数 selected_match_date を更新
         selected_match_date = event.target.value; 
         // 選択された日付に基づいてUIを更新し、ランキングを再取得
-        updateMatchInfoAndRanking(selected_match_date);
+        await updateMatchInfoAndRanking(selected_match_date); // ★ await を追加
     });
     
     return initialDate; 
@@ -162,9 +162,9 @@ function setupDateSelect(gameData) {
  * @param {string} newDate - 新しく選択された日付
  * @param {boolean} [isInitialLoad=false] - 初期ロードかどうか
  */
-function updateMatchInfoAndRanking(newDate, isInitialLoad = false) {
+async function updateMatchInfoAndRanking(newDate, isInitialLoad = false) { // ★ ここを async に変更
     // UIをリセット
-    loadingEl.classList.remove('hidden');
+    loadingEl.classList.remove('hidden'); // スピナーを表示
     rankingContainerEl.classList.add('hidden');
     
     // 新しい日付のイベント情報を検索
@@ -187,8 +187,8 @@ function updateMatchInfoAndRanking(newDate, isInitialLoad = false) {
         arenaDisplayEl.textContent = `開催日: ${newDate} 会場: ${arena}`;
         scoreDisplayEL.textContent = `得点 ${home}: ${home_score} ${visitor}: ${visitor_score}`;
 
-        // ランキングデータを再取得
-        loadRankingData();
+        // ランキングデータを再取得（完了を待つ）
+        await loadRankingData(); // ★ await を追加
         
         // 初回ロードでない場合は、フィルタボタンを ALL にリセット
         if (!isInitialLoad) {
@@ -198,7 +198,7 @@ function updateMatchInfoAndRanking(newDate, isInitialLoad = false) {
         // イベントが見つからない場合の表示
         matchDisoplayEl.textContent = `HOME: -　AWAY: -`;
         arenaDisplayEl.textContent = `開催日: ${newDate} 会場: イベント情報なし`;
-        loadingEl.classList.add('hidden');
+        loadingEl.classList.add('hidden'); // イベントデータがない場合はここで非表示
         rankingContainerEl.innerHTML = "<p>この日付の試合情報はJSONファイルに見つかりませんでした。</p>";
         rankingContainerEl.classList.remove('hidden');
     }
@@ -288,7 +288,7 @@ function renderRanking(ranking) {
     if (ranking.length === 0) {
         container.innerHTML = "<p>投票データがありません。</p>";
         container.classList.remove('hidden');
-        loadingEl.classList.add('hidden');
+        loadingEl.classList.add('hidden'); // スピナーを非表示
         return; 
     }
     
@@ -325,7 +325,7 @@ function renderRanking(ranking) {
         container.appendChild(item);
     });
     
-    loadingEl.classList.add('hidden');
+    loadingEl.classList.add('hidden'); // スピナーを非表示
     container.classList.remove('hidden');
 }
 
