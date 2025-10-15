@@ -6,19 +6,23 @@
   "GAME_DATA":[
     {"match_date":"2025年10月04日",
       "arena":"東急ドレッセとどろきアリーナ",
-      "home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB","score":83},
-      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":91}},
+      "home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB","score":"● 83"},
+      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"91 ◯"}},
     {"match_date":"2025年10月05日",
       "arena":"東急ドレッセとどろきアリーナ",
-      "home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB","score":88},
-      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":114}},
+      "home":{"team_name": "川崎ブレイブサンダース","team_cd":"KB","score":"● 88"},
+      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"114 ◯"}},
     {"match_date":"2025年10月11日",
       "arena":"広島サンプラザホール",
-      "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":73},
-      "visitor":{"team_name":"レバンガ北海道","team_cd":"LH","score":94}},
+      "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"● 73"},
+      "visitor":{"team_name":"レバンガ北海道","team_cd":"LH","score":"94 ◯"}},
     {"match_date":"2025年10月12日",
       "arena":"広島サンプラザホール",
-      "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":97},
-      "visitor":{"team_name":"レバンガ北海道","team_cd":"LH","score":98}} 
+      "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"● 97"},
+      "visitor":{"team_name":"レバンガ北海道","team_cd":"LH","score":"98 ◯"}},
+    {"match_date":"2025年10月15日",
+      "arena":"かたおかアリーナ京都",
+      "home":{"team_name":"京都ハンナリーズ","team_cd":"KH","score":"● 57"},
+      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"82 ◯"}}
     ]
   }
