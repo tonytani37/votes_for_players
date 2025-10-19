@@ -23,6 +23,14 @@
     {"match_date":"2025年10月15日",
       "arena":"かたおかアリーナ京都",
       "home":{"team_name":"京都ハンナリーズ","team_cd":"KH","score":"● 57"},
-      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"82 ◯"}}
+      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"82 ◯"}},
+    {"match_date":"2025年10月18日",
+      "arena":"広島サンプラザホール",
+      "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"◯ 114"},
+      "visitor":{"team_name":"佐賀バルーナーズ","team_cd":"SB","score":"● 92"}},
+    {"match_date":"2025年10月19日",
+      "arena":"広島サンプラザホール",
+      "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"◯ 91"},
+      "visitor":{"team_name":"佐賀バルーナーズ","team_cd":"SB","score":"● 79"}}
     ]
   }
