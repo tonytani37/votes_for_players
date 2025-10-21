@@ -341,7 +341,7 @@ function openModalPlayer(id,ranking) {
   }
   
   const team_code = p.id.slice(0,2);
-  const playerImgSrc = `img/players/${team_code}/${teamCodeForHA}/${p.imgTemp}`;
+  const playerImgSrc = `statics/img/players/${team_code}/${teamCodeForHA}/${p.imgTemp}`;
   const calc_age = calcAge(p.grade)
   if (!p) return;
   modalRoot.innerHTML = `
