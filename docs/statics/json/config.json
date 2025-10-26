@@ -31,6 +31,14 @@
     {"match_date":"2025年10月19日",
       "arena":"広島サンプラザホール",
       "home":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"◯ 91"},
-      "visitor":{"team_name":"佐賀バルーナーズ","team_cd":"SB","score":"● 79"}}
+      "visitor":{"team_name":"佐賀バルーナーズ","team_cd":"SB","score":"● 79"}},
+    {"match_date":"2025年10月25日",
+       "arena":"おおきにアリーナ舞洲",
+       "home":{"team_name":"大阪エヴェッサ","team_cd":"OE","score":"● 97"},
+       "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD","score":"◯ 102"}},
+    {"match_date":"2025年10月26日",
+      "arena":"おおきにアリーナ舞洲",
+      "home":{"team_name":"大阪エヴェッサ","team_cd":"OE","score":"◯ 83"},
+      "visitor":{"team_name":"広島ドラゴンフライズ","team_cd":"HD"},"score":"● 73"}
     ]
   }
